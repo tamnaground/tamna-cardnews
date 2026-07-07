@@ -1,0 +1,12 @@
+{
+  "set_id": "gojang",
+  "cover": { "title": "오늘의 제주어", "word": "고장", "hint": "이게 무슨 뜻일까?" },
+  "cards": [
+    {
+      "word": "고장", "meaning": "꽃",
+      "example_jeju": "질에 고장이 활짝 피었수다.",
+      "example_std": "길에 꽃이 활짝 피었어요."
+    }
+  ],
+  "outro": { "message": "제주어, 같이 지켜요", "brand": "탐라그라운드", "cta": "팔로우하고 매주 제주어 배우기" }
+}

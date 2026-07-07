@@ -1,0 +1,18 @@
+{
+  "id": "rainy_day",
+  "intro": { "title": "비 오는 날,<br>제주 삼춘들", "subtitle": "제주어로 듣는 일상 대화", "duration": 3.2 },
+  "outro": { "duration": 4.5 },
+  "gap": 1.15,
+  "speakers": {
+    "halmang": { "espeak": ["-p", "75", "-s", "125"], "side": "left" },
+    "harbang": { "espeak": ["-p", "25", "-s", "115"], "side": "right" }
+  },
+  "lines": [
+    { "speaker": "halmang", "jeju": "아이고, 비 하영 오람져.", "std": "아이고, 비가 많이 오네." },
+    { "speaker": "harbang", "jeju": "기여, 무사 영 오람신고.", "std": "그러게, 왜 이렇게 오는 걸까." },
+    { "speaker": "halmang", "jeju": "우산도 어신디 큰일 났져.", "std": "우산도 없는데 큰일이네." },
+    { "speaker": "harbang", "jeju": "밭디 물 들카부덴 걱정이여.", "std": "밭에 물 들까 봐 걱정이야." },
+    { "speaker": "halmang", "jeju": "게메마씸, 비 그치민 고장 하영 피키여.", "std": "글쎄 말이야, 비 그치면 꽃이 많이 필 거야." },
+    { "speaker": "harbang", "jeju": "혼저 안네 들어갑주.", "std": "어서 안에 들어가자." }
+  ]
+}

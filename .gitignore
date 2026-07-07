@@ -1,0 +1,18 @@
+# 영상 파이프라인 중간 산출물 (make_video.py가 재생성)
+샘플영상/line*_raw.wav
+샘플영상/line*.wav
+샘플영상/timeline.json
+샘플영상/mix.wav
+샘플영상/frames/
+샘플영상/scene_generated.html
+샘플영상/out.mp4
+
+# 카드뉴스 임시 파일
+카드뉴스/tmp_card_*.html
+
+# 세션마다 다운로드하는 폰트
+샘플영상/NotoSansKR.ttf
+
+# 파이썬
+__pycache__/
+*.pyc

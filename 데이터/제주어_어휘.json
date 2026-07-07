@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "sources": {
+    "namu_grammar": "https://namu.wiki/w/제주 방언/문법",
+    "namu_dialect": "https://namu.wiki/w/제주 방언",
+    "jeju_dict": "https://www.jeju.go.kr/culture/dialect/dictionary.htm",
+    "grandculture": "https://jeju.grandculture.net/jeju/toc/GC00702008",
+    "bazaar_blues": "https://www.harpersbazaar.co.kr/article/66891"
+  },
+  "entries": [
+    {
+      "jeju": "고장", "std": "꽃", "type": "명사", "variants": [],
+      "example_jeju": "질에 고장이 활짝 피었수다.", "example_std": "길에 꽃이 활짝 피었어요.",
+      "sources": ["jeju_dict", "namu_dialect"], "verified": true,
+      "used_in": ["card_1.png", "card_2.png", "card_3.png", "샘플영상/제주삼춘_비오는날_대화.mp4", "샘플영상/오늘의제주어_고장_샘플.mp4"]
+    },
+    {
+      "jeju": "질", "std": "길", "type": "명사", "variants": [],
+      "example_jeju": "질에 고장이 활짝 피었수다.", "example_std": "길에 꽃이 활짝 피었어요.",
+      "sources": ["jeju_dict", "namu_dialect"], "verified": true,
+      "used_in": ["card_3.png"]
+    },
+    {
+      "jeju": "하영", "std": "많이", "type": "부사", "variants": [],
+      "example_jeju": "비 하영 오람져.", "example_std": "비가 많이 오네.",
+      "sources": ["jeju_dict", "namu_dialect"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "무사", "std": "왜", "type": "부사", "variants": [],
+      "example_jeju": "무사 영 오람신고.", "example_std": "왜 이렇게 오는 걸까.",
+      "sources": ["jeju_dict", "namu_dialect"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "기여", "std": "맞아, 그래", "type": "감탄사", "variants": ["기어"],
+      "example_jeju": "기여, 무사 영 오람신고.", "example_std": "그러게, 왜 이렇게 오는 걸까.",
+      "sources": ["namu_dialect"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "혼저", "std": "어서, 빨리", "type": "부사", "variants": ["ᄒᆞᆫ저"],
+      "example_jeju": "혼저 안네 들어갑주.", "example_std": "어서 안에 들어가자.",
+      "sources": ["jeju_dict", "namu_dialect"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "어신디", "std": "없는데", "type": "동사", "variants": ["엇인디"],
+      "example_jeju": "우산도 어신디 큰일 났져.", "example_std": "우산도 없는데 큰일이네.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "게메마씸", "std": "글쎄 말이에요", "type": "관용구", "variants": ["게메마씀", "게메"],
+      "example_jeju": "게메마씸, 비 그치민 고장 하영 피키여.", "example_std": "글쎄 말이야, 비 그치면 꽃이 많이 필 거야.",
+      "sources": ["namu_dialect", "bazaar_blues"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "폭싹 속았수다", "std": "수고하셨습니다", "type": "관용구", "variants": ["폭삭 속았수다"],
+      "example_jeju": "오늘 하루도 폭싹 속았수다.", "example_std": "오늘 하루도 수고하셨습니다.",
+      "sources": ["namu_dialect", "bazaar_blues"], "verified": true,
+      "used_in": []
+    },
+    {
+      "jeju": "혼저옵서예", "std": "어서 오세요", "type": "관용구", "variants": ["ᄒᆞᆫ저옵서예"],
+      "example_jeju": "혼저옵서예!", "example_std": "어서 오세요!",
+      "sources": ["jeju_dict", "namu_dialect"], "verified": true,
+      "used_in": []
+    },
+    {
+      "jeju": "밭디", "std": "밭에", "type": "명사", "variants": [],
+      "example_jeju": "밭디 물 들카부덴 걱정이여.", "example_std": "밭에 물 들까 봐 걱정이야.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "안네", "std": "안에", "type": "명사", "variants": [],
+      "example_jeju": "혼저 안네 들어갑주.", "example_std": "어서 안에 들어가자.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "그치민", "std": "그치면", "type": "동사", "variants": [],
+      "example_jeju": "비 그치민 고장 하영 피키여.", "example_std": "비 그치면 꽃이 많이 필 거야.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "피키여", "std": "필 거야", "type": "동사", "variants": [],
+      "example_jeju": "비 그치민 고장 하영 피키여.", "example_std": "비 그치면 꽃이 많이 필 거야.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "들카부덴", "std": "들까 봐", "type": "동사", "variants": [],
+      "example_jeju": "밭디 물 들카부덴 걱정이여.", "example_std": "밭에 물 들까 봐 걱정이야.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "났져", "std": "났네", "type": "동사", "variants": [],
+      "example_jeju": "우산도 어신디 큰일 났져.", "example_std": "우산도 없는데 큰일이네.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "-암져/-엄져", "std": "~하고 있네 (진행상 서술)", "type": "어미", "variants": ["-암쪄/-엄쪄"],
+      "example_jeju": "비 하영 오람져.", "example_std": "비가 많이 오네.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "-암신고/-엄신고", "std": "~하고 있는 걸까 (진행상 의문)", "type": "어미", "variants": [],
+      "example_jeju": "무사 영 오람신고.", "example_std": "왜 이렇게 오는 걸까.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "-읍주/-ㅂ주", "std": "~합시다 (청유)", "type": "어미", "variants": [],
+      "example_jeju": "혼저 안네 들어갑주.", "example_std": "어서 안에 들어가자.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
+    },
+    {
+      "jeju": "-수다", "std": "~습니다/~어요 (존대 서술)", "type": "어미", "variants": ["-우다"],
+      "example_jeju": "질에 고장이 활짝 피었수다.", "example_std": "길에 꽃이 활짝 피었어요.",
+      "sources": ["namu_grammar"], "verified": true,
+      "used_in": ["card_3.png"]
+    }
+  ]
+}

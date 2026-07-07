@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Noto Sans KR';
+    src: url('NotoSansKR.ttf') format('truetype');
+    font-weight: 100 900;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: #000; }
+
+  .scene {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0;
+    animation-fill-mode: both;
+  }
+
+  /* ---------- shared bits ---------- */
+  .pill {
+    padding: 18px 56px; border-radius: 999px;
+    font-size: 52px; font-weight: 700; color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .dots {
+    position: absolute; inset: 44px; border-radius: 8px;
+    border: 14px dotted rgba(140,120,90,0.35);
+  }
+  .handle {
+    position: absolute; bottom: 80px; width: 100%;
+    text-align: center; font-size: 44px; font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .flower { position: absolute; }
+
+  /* ---------- scene 1 : intro (cream) ---------- */
+  #s1 { background: #F5EDDF; animation: s1vis 24s linear both; }
+  @keyframes s1vis { 0%,14.5% { opacity: 1; } 15%,100% { opacity: 0; } }
+  #s1 .badge { background: #E8622D; animation: popIn 0.7s 0.25s cubic-bezier(.2,1.6,.4,1) both; }
+  #s1 h1 {
+    font-size: 148px; font-weight: 900; color: #3E3226; margin-top: 60px;
+    letter-spacing: -3px;
+    animation: riseIn 0.8s 0.55s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  #s1 p {
+    font-size: 54px; font-weight: 500; color: #8C7A5A; margin-top: 36px;
+    animation: fadeUp 0.8s 1.0s ease-out both;
+  }
+  #s1 .handle { color: #8C7A5A; }
+
+  /* ---------- scene 2 : quiz word (orange) ---------- */
+  #s2 { background: #E8622D; animation: s2vis 24s linear both; }
+  @keyframes s2vis { 0%,14.5% { opacity: 0; } 15%,31% { opacity: 1; } 31.5%,100% { opacity: 0; } }
+  #s2 .badge { background: rgba(255,255,255,0.18); border: 3px solid rgba(255,255,255,0.7);
+    animation: popIn 0.6s 3.9s cubic-bezier(.2,1.6,.4,1) both; }
+  #s2 .word {
+    font-size: 330px; font-weight: 900; color: #FFCC5C; margin-top: 40px;
+    letter-spacing: -6px;
+    text-shadow: 0 10px 0 rgba(60,30,0,0.28);
+    -webkit-text-stroke: 10px #4A2A10; paint-order: stroke fill;
+    animation: bounceIn 0.9s 4.25s cubic-bezier(.2,1.7,.35,1) both;
+  }
+  #s2 .underline {
+    width: 460px; height: 18px; background: #FFCC5C; border-radius: 9px; margin-top: 8px;
+    animation: growX 0.6s 4.9s ease-out both;
+  }
+  #s2 .q {
+    font-size: 72px; font-weight: 700; color: #fff; margin-top: 90px;
+    animation: fadeUp 0.7s 5.4s ease-out both;
+  }
+  #s2 .handle { color: rgba(255,255,255,0.85); }
+
+  /* ---------- scene 3 : answer (cream) ---------- */
+  #s3 { background: #F5EDDF; animation: s3vis 24s linear both; }
+  @keyframes s3vis { 0%,31% { opacity: 0; } 31.5%,47.5% { opacity: 1; } 48%,100% { opacity: 0; } }
+  #s3 .badge { background: #1D5BB8; animation: popIn 0.6s 7.9s cubic-bezier(.2,1.6,.4,1) both; }
+  #s3 .eq { display: flex; align-items: center; gap: 50px; margin-top: 80px; }
+  #s3 .jeju {
+    font-size: 220px; font-weight: 900; color: #E8622D; letter-spacing: -4px;
+    animation: riseIn 0.8s 8.25s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  #s3 .eqsign {
+    font-size: 150px; font-weight: 900; color: #3E3226;
+    animation: fadeUp 0.5s 8.8s ease-out both;
+  }
+  #s3 .std {
+    font-size: 220px; font-weight: 900; color: #3E3226; letter-spacing: -4px;
+    animation: bounceIn 0.8s 9.1s cubic-bezier(.2,1.7,.35,1) both;
+  }
+  #s3 .note {
+    font-size: 50px; font-weight: 500; color: #8C7A5A; margin-top: 90px;
+    animation: fadeUp 0.7s 9.7s ease-out both;
+  }
+  #s3 .handle { color: #8C7A5A; }
+
+  /* ---------- scene 4 : example (light green) ---------- */
+  #s4 { background: #E8EFE3; animation: s4vis 24s linear both; }
+  @keyframes s4vis { 0%,47.5% { opacity: 0; } 48%,64.5% { opacity: 1; } 65%,100% { opacity: 0; } }
+  #s4 .badge { background: #2F7A3D; animation: popIn 0.6s 11.9s cubic-bezier(.2,1.6,.4,1) both; }
+  #s4 .quotemark {
+    font-size: 200px; font-weight: 900; color: #BCD9A0; height: 150px; margin-top: 60px;
+    animation: fadeUp 0.6s 12.3s ease-out both;
+  }
+  #s4 .jejusent {
+    font-size: 84px; font-weight: 800; color: #2B3327; letter-spacing: -2px;
+    animation: riseIn 0.8s 12.55s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  #s4 .arrow {
+    font-size: 64px; color: #7FA36B; margin-top: 70px;
+    animation: fadeUp 0.6s 13.3s ease-out both;
+  }
+  #s4 .stdsent {
+    font-size: 66px; font-weight: 500; color: #5C6B54; margin-top: 30px;
+    animation: fadeUp 0.7s 13.7s ease-out both;
+  }
+  #s4 .handle { color: #93A388; }
+
+  /* ---------- scene 5 : fact (light blue) ---------- */
+  #s5 { background: #E3E9F2; animation: s5vis 24s linear both; }
+  @keyframes s5vis { 0%,64.5% { opacity: 0; } 65%,81% { opacity: 1; } 81.5%,100% { opacity: 0; } }
+  #s5 .badge { background: #1D5BB8; animation: popIn 0.6s 15.9s cubic-bezier(.2,1.6,.4,1) both; }
+  #s5 .fact {
+    font-size: 88px; font-weight: 800; color: #22314A; letter-spacing: -2px;
+    text-align: center; line-height: 1.35; margin-top: 90px;
+    animation: riseIn 0.8s 16.3s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  #s5 .fact .hl { color: #1D5BB8; }
+  #s5 .src {
+    font-size: 48px; font-weight: 500; color: #6B7A94; margin-top: 90px; text-align: center; line-height: 1.6;
+    animation: fadeUp 0.7s 17.2s ease-out both;
+  }
+  #s5 .handle { color: #8A97AC; }
+
+  /* ---------- scene 6 : outro (blue) ---------- */
+  #s6 { background: #2563AC; animation: s6vis 24s linear both; }
+  @keyframes s6vis { 0%,81% { opacity: 0; } 81.5%,100% { opacity: 1; } }
+  #s6 .dots { border-color: rgba(255,255,255,0.28); }
+  #s6 .tag {
+    font-size: 72px; font-weight: 700; color: #DCE8F5;
+    animation: fadeUp 0.7s 19.9s ease-out both;
+  }
+  #s6 .brand {
+    font-size: 150px; font-weight: 900; color: #fff; margin-top: 40px; letter-spacing: -3px;
+    animation: bounceIn 0.9s 20.3s cubic-bezier(.2,1.7,.35,1) both;
+  }
+  #s6 .flowerrow { display: flex; gap: 36px; margin-top: 60px;
+    animation: fadeUp 0.7s 20.9s ease-out both; }
+  #s6 .cta {
+    background: #fff; color: #2563AC; margin-top: 90px;
+    padding: 26px 70px; border-radius: 999px; font-size: 54px; font-weight: 700;
+    animation: popIn 0.7s 21.4s cubic-bezier(.2,1.6,.4,1) both;
+  }
+  #s6 .handle { color: #fff; font-size: 56px; bottom: 110px; }
+
+  /* ---------- keyframes ---------- */
+  @keyframes popIn   { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+  @keyframes bounceIn{ from { opacity: 0; transform: scale(0.2) rotate(-6deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+  @keyframes riseIn  { from { opacity: 0; transform: translateY(120px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp  { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes growX   { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes float1  { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-26px) rotate(6deg); } }
+  @keyframes float2  { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(22px) rotate(-6deg); } }
+  .float1 { animation: float1 3.4s ease-in-out infinite; }
+  .float2 { animation: float2 4.1s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<template id="flowerTpl"></template>
+
+<!-- scene 1 : intro -->
+<div class="scene" id="s1">
+  <div class="dots"></div>
+  <div class="pill badge">탐나 카드뉴스</div>
+  <h1>오늘의 제주어</h1>
+  <p>일주일에 한 마디, 제주말을 배워요</p>
+  <div class="handle">@tamnaground</div>
+</div>
+
+<!-- scene 2 : quiz -->
+<div class="scene" id="s2">
+  <div class="pill badge">Q. 맞혀보세요</div>
+  <div class="word">고장</div>
+  <div class="underline"></div>
+  <div class="q">이게 무슨 뜻일까?</div>
+  <div class="handle">@tamnaground</div>
+</div>
+
+<!-- scene 3 : answer -->
+<div class="scene" id="s3">
+  <div class="dots"></div>
+  <div class="pill badge">뜻</div>
+  <div class="eq">
+    <div class="jeju">고장</div>
+    <div class="eqsign">=</div>
+    <div class="std">꽃</div>
+  </div>
+  <div class="note">제주에서는 꽃을 ‘고장’이라고 불러요</div>
+  <div class="handle">@tamnaground</div>
+</div>
+
+<!-- scene 4 : example -->
+<div class="scene" id="s4">
+  <div class="dots" style="border-color: rgba(120,150,100,0.3);"></div>
+  <div class="pill badge">제주어로 말해보기</div>
+  <div class="quotemark">“</div>
+  <div class="jejusent">질에 고장이 활짝 피었수다.</div>
+  <div class="arrow">▼ 표준어로는?</div>
+  <div class="stdsent">길에 꽃이 활짝 피었어요.</div>
+  <div class="handle">@tamnaground</div>
+</div>
+
+<!-- scene 5 : fact -->
+<div class="scene" id="s5">
+  <div class="dots" style="border-color: rgba(100,120,160,0.3);"></div>
+  <div class="pill badge">알아두기</div>
+  <div class="fact">제주어는 유네스코가 지정한<br><span class="hl">소멸 위기 언어</span>예요</div>
+  <div class="src">유튜브 ‘뭐랭하맨’, WIKITONGUES 영상에서<br>진짜 제주어 목소리를 들어보세요</div>
+  <div class="handle">@tamnaground</div>
+</div>
+
+<!-- scene 6 : outro -->
+<div class="scene" id="s6">
+  <div class="dots"></div>
+  <div class="tag">제주어, 같이 지켜요</div>
+  <div class="brand">탐라그라운드</div>
+  <div class="flowerrow" id="flowerRow"></div>
+  <div class="cta">팔로우하고 매주 제주어 배우기</div>
+  <div class="handle">@tamnaground</div>
+</div>
+
+<script>
+  // 6-petal flower like the card design
+  function flower(size, petal, center) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', size); svg.setAttribute('height', size);
+    svg.setAttribute('viewBox', '0 0 100 100');
+    for (let i = 0; i < 6; i++) {
+      const a = i * Math.PI / 3;
+      const c = document.createElementNS(ns, 'circle');
+      c.setAttribute('cx', 50 + 26 * Math.cos(a));
+      c.setAttribute('cy', 50 + 26 * Math.sin(a));
+      c.setAttribute('r', 22); c.setAttribute('fill', petal);
+      svg.appendChild(c);
+    }
+    const mid = document.createElementNS(ns, 'circle');
+    mid.setAttribute('cx', 50); mid.setAttribute('cy', 50);
+    mid.setAttribute('r', 15); mid.setAttribute('fill', center);
+    svg.appendChild(mid);
+    return svg;
+  }
+  const PINK = '#F2A9C4', YELLOW = '#F7C873', GREEN = '#BCD9A0', BLUE = '#A9C4E8', ORANGE = '#E8622D';
+  function addFlower(sceneId, colors, x, y, size, floatCls) {
+    const d = document.createElement('div');
+    d.className = 'flower ' + floatCls;
+    d.style.left = x; d.style.top = y;
+    d.appendChild(flower(size, colors, ORANGE));
+    document.getElementById(sceneId).appendChild(d);
+  }
+  // sprinkle flowers to echo the card layouts
+  addFlower('s1', PINK,   '110px', '210px', 150, 'float1');
+  addFlower('s1', GREEN,  '500px', '150px', 110, 'float2');
+  addFlower('s1', YELLOW, '840px', '230px', 140, 'float1');
+  addFlower('s1', PINK,   '160px', '1480px', 110, 'float2');
+  addFlower('s1', YELLOW, '810px', '1520px', 130, 'float1');
+
+  addFlower('s3', PINK,   '130px', '240px', 140, 'float1');
+  addFlower('s3', YELLOW, '830px', '260px', 130, 'float2');
+  addFlower('s3', PINK,   '250px', '1450px', 100, 'float2');
+  addFlower('s3', GREEN,  '740px', '1490px', 110, 'float1');
+
+  addFlower('s4', PINK,   '140px', '250px', 130, 'float1');
+  addFlower('s4', YELLOW, '830px', '270px', 120, 'float2');
+  addFlower('s4', PINK,   '490px', '1400px', 100, 'float1');
+
+  addFlower('s5', YELLOW, '140px', '250px', 130, 'float2');
+  addFlower('s5', BLUE,   '830px', '260px', 130, 'float1');
+
+  addFlower('s6', YELLOW, '130px', '240px', 140, 'float1');
+  addFlower('s6', GREEN,  '490px', '170px', 110, 'float2');
+  addFlower('s6', PINK,   '830px', '260px', 140, 'float1');
+  const row = document.getElementById('flowerRow');
+  [[YELLOW, 90], [PINK, 110], [GREEN, 90]].forEach(([c, s]) => row.appendChild(flower(s, c, ORANGE)));
+
+  // deterministic seek for frame-by-frame capture
+  window.seek = function (ms) {
+    document.getAnimations().forEach(a => { a.pause(); a.currentTime = ms; });
+  };
+  window.seek(0);
+</script>
+</body>
+</html>

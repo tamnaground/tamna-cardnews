@@ -182,6 +182,6 @@ html = f"""<!DOCTYPE html>
 </script>
 </body></html>
 """
-with open('scene.html', 'w') as f:
+with open('scene_generated.html', 'w') as f:
     f.write(html)
-print('scene.html written, total =', TOTAL)
+print('scene_generated.html written, total =', TOTAL)

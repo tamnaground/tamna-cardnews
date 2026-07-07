@@ -43,13 +43,19 @@ curl -sSL -o NotoSansKR.ttf "https://raw.githubusercontent.com/google/fonts/main
 - Playwright chromium은 사전 설치됨. `require('/opt/node22/lib/node_modules/playwright')` 사용
 - **네트워크 제약**: gTTS(구글)·edge-tts(MS)는 프록시가 차단함. HTTPS 인증서 오류 시 `cat /root/.ccr/ca-bundle.crt >> $(python3 -c 'import certifi; print(certifi.where())')`
 
-### 파이프라인 순서
+### 파이프라인 실행 (원커맨드)
+
+```bash
+cd 샘플영상 && python3 make_video.py   # → out.mp4 (완성되면 한국어 제목으로 rename 후 커밋)
+```
+
+내부 동작 (개별 실행·디버깅 시 참고):
 
 1. `build_audio.py`: espeak-ng로 대사별 wav 생성 (할망 `-p 75 -s 125`, 하르방 `-p 25 -s 115`), 길이 측정 → `timeline.json`
-2. `build_scene.py`: timeline 기반으로 scene.html 생성 (말풍선·자막·입모양 애니메이션 딜레이 자동 계산)
-3. 렌더링: Playwright로 페이지 열고 `window.seek(ms)`(`document.getAnimations()` 전부 pause 후 currentTime 설정)로 프레임별 스크린샷 → `frames/f%04d.png`
+2. `build_scene.py`: timeline 기반으로 `scene_generated.html` 생성 (말풍선·자막·입모양 애니메이션 딜레이 자동 계산). 커밋된 `scene.html`은 카드뉴스형 별도 샘플이므로 덮어쓰지 않는다
+3. `render.js`: Playwright로 페이지 열고 `window.seek(ms)`(`document.getAnimations()` 전부 pause 후 currentTime 설정)로 프레임별 스크린샷 → `frames/f%04d.png`
 4. `mix_audio.py`: 빗소리 등 앰비언스 + 대사 오프셋 믹싱 → mix.wav
-5. 인코딩: `ffmpeg -framerate 30 -i frames/f%04d.png -i mix.wav -c:v libx264 -crf 21 -pix_fmt yuv420p -c:a aac -movflags +faststart out.mp4`
+5. 인코딩: `ffmpeg -framerate 30 -i frames/f%04d.png -i mix.wav -c:v libx264 -crf 21 -pix_fmt yuv420p -c:a aac -shortest -movflags +faststart out.mp4`
 
 ### 함정 (실제로 겪은 버그)
 

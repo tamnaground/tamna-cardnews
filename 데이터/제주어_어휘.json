@@ -22,7 +22,7 @@
     },
     {
       "jeju": "하영", "std": "많이", "type": "부사", "variants": [],
-      "example_jeju": "비 하영 오람져.", "example_std": "비가 많이 오네.",
+      "example_jeju": "아이고, 비 하영 오람져.", "example_std": "아이고, 비가 많이 오네.",
       "sources": ["jeju_dict", "namu_dialect"], "verified": true,
       "used_in": ["샘플영상/제주삼춘_비오는날_대화.mp4"]
     },

@@ -1,0 +1,318 @@
+/* 탐라그라운드 성읍민속마을 안내 웹앱 */
+:root {
+  --cream: #F5EDDF;
+  --cream-deep: #EFE3CD;
+  --orange: #E8622D;
+  --yellow: #FFCC5C;
+  --yellow-soft: #F7C873;
+  --green: #2F7A3D;
+  --green-soft: #BCD9A0;
+  --blue: #1D5BB8;
+  --blue-mid: #2563AC;
+  --pink: #F2A9C4;
+  --ink: #3E3226;
+  --ink-soft: #6B5D4C;
+  --card: #FFFDF8;
+  --radius: 18px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", "Pretendard", "Malgun Gothic",
+    "Noto Sans SC", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.65;
+  min-height: 100vh;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+#app {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 16px 16px calc(32px + env(safe-area-inset-bottom));
+}
+
+a { color: var(--blue); }
+
+/* ---------- header ---------- */
+.site-header {
+  text-align: center;
+  padding: 18px 8px 10px;
+}
+.site-header .flower { width: 44px; height: 44px; display: inline-block; }
+.site-header h1 {
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  margin-top: 6px;
+  color: var(--ink);
+}
+.site-header .subtitle {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+.brand-badge {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--orange);
+  background: var(--card);
+  border: 1.5px dashed var(--orange);
+  border-radius: 999px;
+  padding: 3px 12px;
+}
+
+/* ---------- language switcher ---------- */
+.lang-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin: 14px 0 18px;
+}
+.lang-bar button {
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink-soft);
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+.lang-bar button:active { transform: scale(0.95); }
+.lang-bar button[aria-pressed="true"] {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+.lang-bar button.je-tab[aria-pressed="true"] {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+/* ---------- home: spot list ---------- */
+.home-intro {
+  background: var(--card);
+  border: 2px dashed var(--yellow-soft);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+}
+.home-intro .je-greet {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--green);
+}
+
+.spot-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  list-style: none;
+}
+@media (min-width: 520px) {
+  .spot-grid { grid-template-columns: 1fr 1fr; }
+}
+.spot-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  border: 2px solid var(--cream-deep);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+.spot-card:hover, .spot-card:focus-visible {
+  border-color: var(--orange);
+  transform: translateY(-1px);
+}
+.spot-card .icon {
+  font-size: 1.9rem;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border-radius: 14px;
+}
+.spot-card .meta { min-width: 0; }
+.spot-card .name { font-weight: 700; font-size: 1.02rem; }
+.spot-card .tagline {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- spot detail ---------- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--blue-mid);
+  text-decoration: none;
+  margin-bottom: 12px;
+}
+
+.spot-hero {
+  background: var(--card);
+  border: 2px dashed var(--orange);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.spot-hero .icon { font-size: 2.6rem; }
+.spot-hero .category {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--blue);
+  background: #E9F0FB;
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin: 8px 0 6px;
+}
+.spot-hero h2 { font-size: 1.5rem; letter-spacing: -0.02em; }
+.spot-hero .name-ko-sub {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+.spot-hero .heritage {
+  font-size: 0.78rem;
+  color: var(--green);
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.section-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  border: 2px solid var(--cream-deep);
+}
+.section-card h3 {
+  font-size: 0.95rem;
+  color: var(--orange);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-card p { margin-bottom: 10px; font-size: 0.97rem; }
+.section-card p:last-child { margin-bottom: 0; }
+.section-card ul { padding-left: 20px; }
+.section-card li { margin-bottom: 8px; font-size: 0.93rem; }
+.section-card li:last-child { margin-bottom: 0; }
+
+/* 제주어 문장 쌍 (제주어 + 표준어 병기) */
+.je-pair { margin-bottom: 14px; }
+.je-pair:last-child { margin-bottom: 0; }
+.je-pair .je-line {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.je-pair .ko-line {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-top: 2px;
+  padding-left: 10px;
+  border-left: 3px solid var(--green-soft);
+}
+.je-note {
+  font-size: 0.78rem;
+  color: var(--green);
+  background: #F0F7EA;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- TTS button ---------- */
+.tts-btn {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blue-mid);
+  border: none;
+  border-radius: 999px;
+  padding: 9px 18px;
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+.tts-btn[data-speaking="true"] { background: var(--orange); }
+.tts-btn:disabled { background: var(--ink-soft); opacity: 0.5; cursor: default; }
+.tts-note { font-size: 0.75rem; color: var(--ink-soft); margin: -8px 0 14px; }
+
+/* ---------- prev/next nav ---------- */
+.spot-nav {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0 8px;
+}
+.spot-nav a {
+  flex: 1;
+  min-width: 0;
+  background: var(--card);
+  border: 2px solid var(--cream-deep);
+  border-radius: 14px;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+.spot-nav a:hover { border-color: var(--orange); }
+.spot-nav .dir { font-size: 0.72rem; color: var(--ink-soft); display: block; }
+.spot-nav .next { text-align: right; }
+.spot-nav .spacer { flex: 1; visibility: hidden; }
+
+/* ---------- footer ---------- */
+.site-footer {
+  text-align: center;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 2px dashed var(--yellow-soft);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.site-footer .motto {
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 4px;
+}
+
+.not-found {
+  text-align: center;
+  padding: 40px 16px;
+}
+.not-found .icon { font-size: 3rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

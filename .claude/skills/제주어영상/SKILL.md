@@ -30,7 +30,8 @@ description: 제주어(제주 방언) 영상 콘텐츠 제작 스킬. 유튜브 
 
 ## 3단계 — 애니메이션 영상 (로컬 렌더링 파이프라인)
 
-참고 구현: `샘플영상/scene.html`(카드뉴스형), `샘플영상/build_audio.py` + `build_scene.py` + `mix_audio.py`(대화형). 대사만 바꾸면 재생성 가능.
+참고 구현: `샘플영상/scene.html`(카드뉴스형), `샘플영상/build_audio.py` + `build_scene.py` + `mix_audio.py`(대화형).
+**새 대화 영상 = `샘플영상/episodes/`에 에피소드 JSON 추가** (스키마는 `episodes/rainy_day.json` 참고 — 대사·화자·인트로 문구·간격을 담는다. 화자는 halmang/harbang 2종만 지원). 파이썬 코드 수정 불필요.
 
 ### 환경 준비 (원격 세션마다 필요)
 
@@ -46,7 +47,7 @@ curl -sSL -o NotoSansKR.ttf "https://raw.githubusercontent.com/google/fonts/main
 ### 파이프라인 실행 (원커맨드)
 
 ```bash
-cd 샘플영상 && python3 make_video.py   # → out.mp4 (완성되면 한국어 제목으로 rename 후 커밋)
+cd 샘플영상 && python3 make_video.py episodes/rainy_day.json   # → out.mp4 (완성되면 한국어 제목으로 rename 후 커밋)
 ```
 
 내부 동작 (개별 실행·디버깅 시 참고):

@@ -1,10 +1,12 @@
-"""Generate scene.html for the 'Jeju samchons talk about rain' video from timeline.json."""
+"""Generate scene_generated.html for a samchon-dialogue episode from timeline.json."""
+import html as html_mod
 import json, math, os, random
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 T = json.load(open('timeline.json'))
 TOTAL = T['total']
 OUTRO = T['outro_start']
+SIDES = {spk: v['side'] for spk, v in T['speakers'].items()}
 
 # ---- per-line CSS: bubbles, subtitles, mouth talk animations ----
 bubble_css, bubble_html, sub_css, sub_html = [], [], [], []
@@ -14,15 +16,15 @@ bob_anims = {'halmang': [], 'harbang': []}
 for L in T['lines']:
     i, spk, start, dur = L['i'], L['speaker'], L['start'], L['dur']
     end = start + dur + 0.55
-    side = 'left' if spk == 'halmang' else 'right'
+    side = SIDES[spk]
     bubble_css.append(f"""
   #b{i} {{ animation: bubbleIn 0.45s {start - 0.25:.2f}s cubic-bezier(.2,1.5,.4,1) both,
            bubbleOut 0.4s {end:.2f}s ease-in forwards; }}""")
     bubble_html.append(
-        f'<div class="bubble {side}" id="b{i}"><span>{L["jeju"]}</span><div class="tail"></div></div>')
+        f'<div class="bubble {side}" id="b{i}"><span>{html_mod.escape(L["jeju"])}</span><div class="tail"></div></div>')
     sub_css.append(f"""
   #sub{i} {{ animation: fadeUp 0.4s {start - 0.1:.2f}s ease-out both, bubbleOut 0.35s {end:.2f}s ease-in forwards; }}""")
-    sub_html.append(f'<div class="subtitle" id="sub{i}">{L["std"]}</div>')
+    sub_html.append(f'<div class="subtitle" id="sub{i}">{html_mod.escape(L["std"])}</div>')
     reps = max(int(math.ceil(dur / 0.30)), 3)
     talk_anims[spk].append(f'talk 0.30s {start:.2f}s {reps}')
     bob_anims[spk].append(f'bob 0.6s {start:.2f}s {max(int(math.ceil(dur / 0.6)), 2)}')
@@ -98,7 +100,7 @@ html = f"""<!DOCTYPE html>
   @keyframes bubbleOut {{ from {{ opacity:1; }} to {{ opacity:0; }} }}
 {"".join(bubble_css)}
 
-  .subtitle {{ position:absolute; bottom:56px; left:50%; transform:translateX(-50%); white-space:nowrap; background:rgba(20,28,38,.72); color:#EAF0F6; font-size:44px; font-weight:500; padding:18px 46px; border-radius:ars 999px; border-radius:999px; }}
+  .subtitle {{ position:absolute; bottom:56px; left:50%; transform:translateX(-50%); max-width:960px; width:max-content; text-align:center; word-break:keep-all; background:rgba(20,28,38,.72); color:#EAF0F6; font-size:44px; font-weight:500; padding:18px 46px; border-radius:999px; }}
 {"".join(sub_css)}
   @keyframes fadeUp {{ from {{ opacity:0; transform:translateX(-50%) translateY(30px); }} to {{ opacity:1; transform:translateX(-50%) translateY(0); }} }}
 
@@ -158,7 +160,7 @@ html = f"""<!DOCTYPE html>
 {"".join(bubble_html)}
 {"".join(sub_html)}
 
-  <div class="card" id="intro"><div class="t1">비 오는 날,<br>제주 삼춘들</div><div class="t2">제주어로 듣는 일상 대화</div></div>
+  <div class="card" id="intro"><div class="t1">{T['intro_title']}</div><div class="t2">{T['intro_subtitle']}</div></div>
   <div class="card" id="outro"><div class="t1">제주어, 같이 지켜요</div><div class="t2">탐라그라운드</div><div class="t3">@tamnaground</div></div>
 
 <script>

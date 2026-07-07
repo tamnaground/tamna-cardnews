@@ -1,4 +1,4 @@
-"""원커맨드 영상 빌드: python3 make_video.py"""
+"""원커맨드 영상 빌드: python3 make_video.py [episodes/<이름>.json]"""
 import json
 import os
 import shutil
@@ -21,7 +21,8 @@ def run(cmd):
 assert shutil.which('espeak-ng'), 'espeak-ng 미설치: apt-get install -y espeak-ng'
 assert os.path.exists('NotoSansKR.ttf'), 'NotoSansKR.ttf 없음: SKILL.md 환경 준비 참고'
 
-run([sys.executable, 'build_audio.py'])
+EPISODE = sys.argv[1] if len(sys.argv) > 1 else 'episodes/rainy_day.json'
+run([sys.executable, 'build_audio.py', EPISODE])
 run([sys.executable, 'build_scene.py'])
 shutil.rmtree('frames', ignore_errors=True)  # 이전 렌더 잔여 프레임이 남으면 ffmpeg가 옛 프레임을 이어 붙인다
 run(['node', 'render.js', 'scene_generated.html', '30'])

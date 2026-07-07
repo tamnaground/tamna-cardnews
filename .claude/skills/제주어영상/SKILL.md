@@ -11,12 +11,12 @@ description: 제주어(제주 방언) 영상 콘텐츠 제작 스킬. 유튜브 
 
 - 규격: 1080x1920 (9:16 쇼츠/릴스), 30fps, H.264 MP4 + AAC
 - 핸들 `@tamnaground`를 항상 화면에 표시, 마무리 문구는 "제주어, 같이 지켜요 — 탐라그라운드"
-- 카드뉴스 팔레트: 크림 `#F5EDDF`, 주황 `#E8622D`, 노랑 `#FFCC5C`/`#F7C873`, 초록 `#2F7A3D`/`#BCD9A0`, 파랑 `#1D5BB8`/`#2563AC`, 분홍 `#F2A9C4`, 글자 `#3E3226`. 6잎 꽃 모티프와 점선 테두리 사용 (card_1~5.png 참고)
-- 완성물은 `샘플영상/`에, 조사 자료는 `첨부자료/`에 저장하고 지정 브랜치에 커밋한다
+- 카드뉴스 팔레트: 크림 `#F5EDDF`, 주황 `#E8622D`, 노랑 `#FFCC5C`/`#F7C873`, 초록 `#2F7A3D`/`#BCD9A0`, 파랑 `#1D5BB8`/`#2563AC`, 분홍 `#F2A9C4`, 글자 `#3E3226`. 6잎 꽃 모티프와 점선 테두리 사용 (`output/2026-07-06_카드뉴스-고장/card_1~5.png` 참고)
+- 저장 위치는 루트 `CLAUDE.md`의 파이프라인 규칙을 따른다: 진행 중 조사·대사는 `projects/`의 프로젝트 파일에, 완성물은 `output/YYYY-MM-DD_이름/`에 발행노트와 함께 저장하고 지정 브랜치에 커밋한다
 
 ## 1단계 — 자료 조사
 
-`첨부자료/제주어_유튜브_콘텐츠.md`를 먼저 읽는다 (뭐랭하맨, Wikitongues 'Hyun speaking Jejueo', CNA 다큐, GO! Billy Korean, KBS제주/JIBS 등 정리됨). 새 주제면 WebSearch로 보강하고 문서를 갱신한다.
+`wiki/제주어-유튜브-콘텐츠.md`를 먼저 읽는다 (뭐랭하맨, Wikitongues 'Hyun speaking Jejueo', CNA 다큐, GO! Billy Korean, KBS제주/JIBS 등 정리됨). 검증된 표현은 `wiki/제주어-표현.md`에 있다. 새 주제의 조사 내용은 진행 중인 `projects/` 파일에 적고, wiki 갱신은 콘텐츠 완성 후 `/harvest`로 한다.
 
 ## 2단계 — 제주어 대사 작성
 
@@ -30,7 +30,7 @@ description: 제주어(제주 방언) 영상 콘텐츠 제작 스킬. 유튜브 
 
 ## 3단계 — 애니메이션 영상 (로컬 렌더링 파이프라인)
 
-참고 구현: `샘플영상/scene.html`(카드뉴스형), `샘플영상/build_audio.py` + `build_scene.py` + `mix_audio.py`(대화형). 대사만 바꾸면 재생성 가능.
+참고 구현: `output/2026-07-06_샘플영상-제주어/` 안의 `scene.html`(카드뉴스형), `build_audio.py` + `build_scene.py` + `mix_audio.py`(대화형). output은 불변이므로 수정하지 말고 새 프로젝트의 작업 폴더로 복사해서 대사만 바꿔 재생성한다.
 
 ### 환경 준비 (원격 세션마다 필요)
 
@@ -60,7 +60,7 @@ curl -sSL -o NotoSansKR.ttf "https://raw.githubusercontent.com/google/fonts/main
 ## 4단계 — 실사(포토리얼) 영상: HeyGen
 
 - **이 CLI 세션에서는 HeyGen compose/render가 정책상 차단됨.** 실사 생성은 사용자가 claude.ai 웹/데스크톱 채팅에서 해야 한다
-- `첨부자료/실사영상_제작패키지.md`의 생성 프롬프트를 주제에 맞게 갱신해서 사용자에게 전달한다
+- `projects/제주어-실사영상.md`의 생성 프롬프트를 주제에 맞게 갱신해서 사용자에게 전달한다
 - 이 세션에서 가능한 것: `mcp__HyperFrames_by_HeyGen__list_projects` / `get_project_status` / `get_render_status`로 진행 상황 조회, 완성된 MP4 URL 확보 후 저장소에 정리
 
 ## 마무리

@@ -5,7 +5,7 @@
   .headline{font-size:38px;font-weight:800;line-height:1.35;margin-bottom:6px;}
   .headline b{color:var(--orange);}
   .flowerbox{margin:6px 0 4px;}
-  .flowerbox svg{width:330px;height:300px;}
+  .flowerbox svg{width:660px;height:280px;}
   .legend{display:flex;gap:26px;justify-content:center;margin:4px 0 14px;}
   .legend .it{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:700;}
   .sw{width:26px;height:26px;border-radius:50%;border:3px solid var(--ink);}
@@ -23,32 +23,55 @@
     <img class="corner tl" src="flower.svg"><img class="corner tr" src="flower.svg">
     <div class="frame"></div>
     <div class="inner">
-      <div class="headline">댓글로 <b>제주어</b>를 따라 쓰면<br>탐탐이의 꽃잎이 다시 빛나요</div>
+      <div class="headline">댓글로 <b>제주어</b>를 따라 쓰면<br>나무 수호신의 <b>말의 새싹</b>이 자라요</div>
       <div class="flowerbox">
-        <svg viewBox="-90 -90 180 190" xmlns="http://www.w3.org/2000/svg">
-          <defs><g id="pt"><ellipse cx="0" cy="-46" rx="22" ry="35"/></g></defs>
-          <g stroke="#3E3226" stroke-width="4.5" stroke-linejoin="round">
-            <!-- 빛나는 잎 2장: 발광 링 -->
-            <ellipse cx="0" cy="-46" rx="30" ry="43" fill="#FFCC5C" opacity="0.3" stroke="none"/>
-            <use href="#pt" fill="#FFCC5C"/>
-            <g transform="rotate(60)"><ellipse cx="0" cy="-46" rx="30" ry="43" fill="#FFCC5C" opacity="0.3" stroke="none"/><use href="#pt" fill="#FFCC5C"/></g>
-            <!-- 평상 잎 3장 -->
-            <use href="#pt" fill="#F7C873" transform="rotate(120)"/>
-            <use href="#pt" fill="#F7C873" transform="rotate(180)"/>
-            <use href="#pt" fill="#F7C873" transform="rotate(240)"/>
-            <!-- 시든 잎 1장 -->
-            <use href="#pt" fill="#F5EDDF" stroke-dasharray="6 5" transform="rotate(300)"/>
+        <svg viewBox="0 0 640 270" xmlns="http://www.w3.org/2000/svg">
+          <!-- 흙 밭 -->
+          <path d="M40 214 Q40 196 62 196 L578 196 Q600 196 600 214 L600 236 Q600 254 578 254 L62 254 Q40 254 40 236 Z"
+                fill="#B08D5F" stroke="#3E3226" stroke-width="4"/>
+          <path d="M40 214 Q40 196 62 196 L578 196 Q600 196 600 214 Z" fill="#8F6F45" opacity="0.35"/>
+
+          <!-- ① 시든 새싹 (잊혀가는 말) -->
+          <g stroke="#3E3226" stroke-width="4" stroke-linejoin="round">
+            <path d="M140 210 L146 156" fill="none" stroke-linecap="round"/>
+            <path d="M146 176 Q120 172 112 150 Q138 150 146 176 Z" fill="#F5EDDF" stroke-dasharray="6 5"/>
+            <path d="M146 170 Q172 162 182 142 Q156 142 146 170 Z" fill="#F5EDDF" stroke-dasharray="6 5"/>
           </g>
-          <circle cx="0" cy="0" r="21" fill="#E8622D" stroke="#3E3226" stroke-width="4.5"/>
-          <path d="M0 21 L0 60" stroke="#2F7A3D" stroke-width="8" stroke-linecap="round"/>
+
+          <!-- ② 평상 새싹 (살아있는 말) -->
+          <g stroke="#5C8A3C" stroke-width="4.5" stroke-linejoin="round">
+            <path d="M320 208 L320 138" fill="none" stroke-linecap="round"/>
+            <path d="M320 168 Q292 162 282 138 Q310 140 320 168 Z" fill="#7FA653"/>
+            <path d="M320 160 Q348 154 358 130 Q330 132 320 160 Z" fill="#7FA653"/>
+          </g>
+
+          <!-- ③ 자라는 새싹 (오늘 살아난 말) — 발광 -->
+          <circle cx="500" cy="120" r="72" fill="#7FA653" opacity="0.16"/>
+          <circle cx="500" cy="120" r="50" fill="#FFCC5C" opacity="0.20"/>
+          <g stroke="#5C8A3C" stroke-width="5" stroke-linejoin="round">
+            <path d="M500 208 L500 96" fill="none" stroke-linecap="round"/>
+            <path d="M500 150 Q464 142 452 112 Q488 116 500 150 Z" fill="#7FA653"/>
+            <path d="M500 136 Q536 128 548 98 Q512 102 500 136 Z" fill="#7FA653"/>
+            <path d="M500 116 Q486 96 490 70 Q510 84 500 116 Z" fill="#7FA653"/>
+          </g>
+          <!-- 반짝 -->
+          <g fill="#FFCC5C" stroke="none">
+            <circle cx="448" cy="72" r="5"/><circle cx="556" cy="88" r="4"/><circle cx="500" cy="46" r="4.5"/>
+          </g>
+
+          <!-- 성장 화살표 -->
+          <path d="M198 172 L268 172" fill="none" stroke="#3E3226" stroke-width="4" stroke-linecap="round"/>
+          <path d="M258 165 L270 172 L258 179" fill="none" stroke="#3E3226" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M378 158 L448 158" fill="none" stroke="#3E3226" stroke-width="4" stroke-linecap="round"/>
+          <path d="M438 151 L450 158 L438 165" fill="none" stroke="#3E3226" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <div class="legend">
-        <div class="it"><span class="sw" style="background:#FFCC5C"></span>빛나는 잎</div>
-        <div class="it"><span class="sw" style="background:#F7C873"></span>살아있는 말</div>
         <div class="it"><span class="sw" style="background:#F5EDDF;border-style:dashed"></span>잊혀가는 말</div>
+        <div class="it"><span class="sw" style="background:#7FA653"></span>살아있는 말</div>
+        <div class="it"><span class="sw" style="background:#7FA653;box-shadow:0 0 0 4px #FFCC5C55"></span>오늘 살아난 말</div>
       </div>
-      <div class="desc">한 마디 따라 쓰는 것도 <b>지키는 것</b>.<br>여러분이 따라 쓸 때마다 다음 화에서 꽃잎 하나가 빛나요.</div>
+      <div class="desc">한 마디 따라 쓰는 것도 <b>지키는 것</b>.<br>여러분이 따라 쓸 때마다 다음 화에서 새싹이 한 마디만큼 자라요.</div>
       <div class="chip">혼저옵서예<span class="g">어서 오세요</span></div>
       <div class="cta">댓글에 오늘의 한 마디를 따라 써 주세요</div>
     </div>

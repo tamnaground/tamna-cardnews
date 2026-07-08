@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- 나무의 수호신 — 새싹 통나무. 나이테 윗면·가지팔+잎2장·품에 새싹·잎 각인·초록 발 -->
+  <!-- 몸통 #D9B98C / 나이테·각인 #B08D5F / 윤곽 #8F6F45 / 잎·새싹·신발 #7FA653(진잎 #5C8A3C) / 홍조 #E8A87C -->
+
+  <!-- 바닥 그림자 -->
+  <ellipse cx="200" cy="372" rx="112" ry="14" fill="#3E3226" opacity="0.10"/>
+
+  <!-- 초록 신발 (발) — 몸통 뒤에 살짝 -->
+  <ellipse cx="164" cy="356" rx="30" ry="17" fill="#7FA653" stroke="#5C8A3C" stroke-width="6"/>
+  <ellipse cx="236" cy="356" rx="30" ry="17" fill="#7FA653" stroke="#5C8A3C" stroke-width="6"/>
+
+  <!-- 옆으로 뻗은 가지 팔 + 초록 잎 2장 (왼쪽) -->
+  <path d="M108 214 Q72 200 56 168" fill="none" stroke="#8F6F45" stroke-width="9" stroke-linecap="round"/>
+  <path d="M58 172 Q40 150 44 124 Q64 138 66 164 Z" fill="#7FA653" stroke="#5C8A3C" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M60 168 Q82 156 104 164 Q86 182 62 176 Z" fill="#7FA653" stroke="#5C8A3C" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- 통나무 몸통 (그루터기) -->
+  <path d="M106 150
+           C106 200 106 300 106 314
+           C106 340 142 352 200 352
+           C258 352 294 340 294 314
+           C294 300 294 200 294 150 Z"
+        fill="#D9B98C" stroke="#8F6F45" stroke-width="7" stroke-linejoin="round"/>
+
+  <!-- 오른쪽 음영 -->
+  <path d="M294 150 L294 314 C294 334 274 345 244 350 C276 343 284 330 284 314 L284 150 Z"
+        fill="#B08D5F" opacity="0.45"/>
+
+  <!-- 몸통 잎사귀 각인 (스탬프) -->
+  <path d="M150 300 Q150 282 168 276 Q166 296 150 300 Z" fill="none" stroke="#B08D5F" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M150 300 L166 282" stroke="#B08D5F" stroke-width="3"/>
+
+  <!-- 윗면 나이테 (비스듬히 잘린 그루터기 단면) -->
+  <ellipse cx="200" cy="150" rx="94" ry="33" fill="#B08D5F" stroke="#8F6F45" stroke-width="7"/>
+  <ellipse cx="200" cy="150" rx="64" ry="21" fill="none" stroke="#8F6F45" stroke-width="3.5"/>
+  <ellipse cx="203" cy="151" rx="36" ry="11.5" fill="none" stroke="#8F6F45" stroke-width="3.5"/>
+  <ellipse cx="206" cy="152" rx="12" ry="4.5" fill="#8F6F45"/>
+
+  <!-- 볼터치 -->
+  <ellipse cx="150" cy="252" rx="17" ry="11" fill="#E8A87C"/>
+  <ellipse cx="250" cy="252" rx="17" ry="11" fill="#E8A87C"/>
+
+  <!-- 눈 (감은 듯 다정한 반달) + 미소 -->
+  <path d="M156 232 Q173 246 190 232" fill="none" stroke="#8F6F45" stroke-width="7" stroke-linecap="round"/>
+  <path d="M210 232 Q227 246 244 232" fill="none" stroke="#8F6F45" stroke-width="7" stroke-linecap="round"/>
+  <path d="M182 260 Q200 274 218 260" fill="none" stroke="#8F6F45" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- 품에 안은 새싹 모종 ('말의 새싹' 화신) + 감싼 팔 -->
+  <path d="M292 236 Q302 296 234 314 Q210 318 200 302" fill="none" stroke="#8F6F45" stroke-width="9" stroke-linecap="round"/>
+  <!-- 모종 흙받침 -->
+  <path d="M206 316 Q206 300 236 300 Q266 300 266 316 Q266 326 236 326 Q206 326 206 316 Z" fill="#B08D5F" stroke="#8F6F45" stroke-width="5"/>
+  <!-- 새싹 줄기 -->
+  <path d="M236 302 L236 276" stroke="#5C8A3C" stroke-width="5" stroke-linecap="round"/>
+  <!-- 새싹 잎 2장 -->
+  <path d="M236 288 Q216 284 210 266 Q230 268 236 288 Z" fill="#7FA653" stroke="#5C8A3C" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M236 284 Q256 278 264 260 Q242 262 236 284 Z" fill="#7FA653" stroke="#5C8A3C" stroke-width="4.5" stroke-linejoin="round"/>
+</svg>

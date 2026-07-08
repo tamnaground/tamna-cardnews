@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- 돌의 수호신 — 윙크하는 현무암. 윙크·머리 위 돌·구슬 목걸이·기공 점·머리 옆 잎 -->
+  <!-- 몸통 #5A554F / 음영 #45403A / 기공 점 #383430 / 입 안 #7A4A3E / 잎 #7FA653 / 홍조 #C77E5E -->
+
+  <!-- 바닥 그림자 -->
+  <ellipse cx="200" cy="342" rx="122" ry="16" fill="#3E3226" opacity="0.12"/>
+
+  <!-- 양옆 귀처럼 붙은 둥근 돌기 -->
+  <circle cx="84" cy="252" r="24" fill="#5A554F" stroke="#45403A" stroke-width="6"/>
+  <circle cx="316" cy="252" r="24" fill="#5A554F" stroke="#45403A" stroke-width="6"/>
+
+  <!-- 머리 옆 작은 초록 잎 (좌상단) -->
+  <path d="M126 150 Q104 138 98 112 Q122 122 130 148 Z" fill="#7FA653" stroke="#5C8A3C" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M120 146 L110 122" stroke="#5C8A3C" stroke-width="3.5"/>
+
+  <!-- 머리 위 작은 돌 하나 -->
+  <path d="M200 118 C182 118 172 130 172 140 C172 150 186 154 200 154 C214 154 228 150 228 140 C228 130 218 118 200 118 Z"
+        fill="#45403A" stroke="#383430" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- 몸통 (둥근 현무암 덩어리, 앉은 찐빵형) -->
+  <path d="M200 148
+           C116 148 76 208 76 262
+           C76 312 130 334 200 334
+           C270 334 324 312 324 262
+           C324 208 284 148 200 148 Z"
+        fill="#5A554F" stroke="#45403A" stroke-width="7" stroke-linejoin="round"/>
+
+  <!-- 오른쪽 음영 -->
+  <path d="M324 262 C324 208 284 148 200 148 C244 148 300 196 300 262 C300 308 262 328 210 333 C272 330 324 308 324 262 Z"
+        fill="#45403A" opacity="0.5"/>
+
+  <!-- 현무암 기공 점 (4개) -->
+  <circle cx="132" cy="230" r="6" fill="#383430"/>
+  <circle cx="272" cy="222" r="5.5" fill="#383430"/>
+  <circle cx="296" cy="278" r="5" fill="#383430"/>
+  <circle cx="110" cy="288" r="5" fill="#383430"/>
+
+  <!-- 볼터치 -->
+  <ellipse cx="140" cy="262" rx="18" ry="12" fill="#C77E5E"/>
+  <ellipse cx="260" cy="262" rx="18" ry="12" fill="#C77E5E"/>
+
+  <!-- 눈: 왼쪽 뜬 눈 / 오른쪽 윙크 (식별 1순위) -->
+  <ellipse cx="164" cy="238" rx="9" ry="12" fill="#F5EDDF"/>
+  <circle cx="166" cy="235" r="3" fill="#45403A"/>
+  <path d="M218 242 Q238 228 258 242" fill="none" stroke="#F5EDDF" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- 활짝 웃는 입 -->
+  <path d="M162 272 Q200 308 238 272 Q220 282 200 282 Q180 282 162 272 Z"
+        fill="#7A4A3E" stroke="#F5EDDF" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M176 276 Q200 288 224 276" fill="#C77E5E"/>
+
+  <!-- 구슬(돌) 목걸이 -->
+  <g fill="#45403A" stroke="#2f2b27" stroke-width="2.5">
+    <circle cx="150" cy="318" r="8"/>
+    <circle cx="175" cy="326" r="8.5"/>
+    <circle cx="200" cy="329" r="9"/>
+    <circle cx="225" cy="326" r="8.5"/>
+    <circle cx="250" cy="318" r="8"/>
+  </g>
+</svg>

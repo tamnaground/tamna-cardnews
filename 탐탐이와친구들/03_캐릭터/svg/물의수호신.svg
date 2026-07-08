@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- 물의 수호신 — 물방울. 물결 머리꼭지·배 물결띠·팔 벌림·주변 방울. 민트아쿠아 원본 HEX -->
+  <!-- 몸통 #A8DCD9 / 배 물결 #CDEDEA / 윤곽 #6FB8B2 / 뺨 홍조 #F2B8A0 / 눈 #4A3B30 -->
+
+  <!-- 바닥 그림자 -->
+  <ellipse cx="200" cy="366" rx="96" ry="14" fill="#3E3226" opacity="0.10"/>
+
+  <!-- 주변 작은 물방울 입자 -->
+  <path d="M64 168 C64 158 72 150 72 150 C72 150 80 158 80 168 C80 174 76 179 72 179 C68 179 64 174 64 168 Z" fill="#A8DCD9" stroke="#6FB8B2" stroke-width="3.5"/>
+  <path d="M330 150 C330 142 337 135 337 135 C337 135 344 142 344 150 C344 155 341 159 337 159 C333 159 330 155 330 150 Z" fill="#A8DCD9" stroke="#6FB8B2" stroke-width="3.5"/>
+  <circle cx="52" cy="248" r="7" fill="#CDEDEA" stroke="#6FB8B2" stroke-width="3"/>
+  <circle cx="350" cy="238" r="8" fill="#CDEDEA" stroke="#6FB8B2" stroke-width="3"/>
+
+  <!-- 양팔 활짝 (하이텐션) — 뒤에 깔리는 팔 -->
+  <path d="M132 226 Q92 196 78 150" fill="none" stroke="#6FB8B2" stroke-width="30" stroke-linecap="round"/>
+  <path d="M268 226 Q308 196 322 150" fill="none" stroke="#6FB8B2" stroke-width="30" stroke-linecap="round"/>
+
+  <!-- 짧은 두 발 -->
+  <ellipse cx="170" cy="352" rx="24" ry="15" fill="#A8DCD9" stroke="#6FB8B2" stroke-width="6"/>
+  <ellipse cx="230" cy="352" rx="24" ry="15" fill="#A8DCD9" stroke="#6FB8B2" stroke-width="6"/>
+
+  <!-- 물방울 몸통 (위 뾰족한 눈물방울, 머리꼭지가 물결처럼 살짝 흘러내림) -->
+  <path d="M206 58
+           C210 80 210 98 202 112
+           C214 122 230 138 244 158
+           C266 188 272 204 272 224
+           C272 300 240 346 200 346
+           C160 346 128 300 128 224
+           C128 200 138 174 158 148
+           C176 124 192 102 194 80
+           C194 80 190 108 202 118
+           C196 100 200 76 206 58 Z"
+        fill="#A8DCD9" stroke="#6FB8B2" stroke-width="7" stroke-linejoin="round"/>
+
+  <!-- 하이라이트 (물 광택) -->
+  <ellipse cx="166" cy="188" rx="15" ry="28" fill="#CDEDEA" opacity="0.85" transform="rotate(-16 166 188)"/>
+
+  <!-- 배 물결 무늬 띠 -->
+  <path d="M134 268
+           Q157 254 180 268 T226 268 T272 268
+           L272 292
+           Q249 306 226 292 T180 292 T134 292 Z"
+        fill="#CDEDEA" stroke="#6FB8B2" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- 양팔 활짝 — 위 채움 -->
+  <path d="M132 226 Q92 196 78 150" fill="none" stroke="#A8DCD9" stroke-width="19" stroke-linecap="round"/>
+  <path d="M268 226 Q308 196 322 150" fill="none" stroke="#A8DCD9" stroke-width="19" stroke-linecap="round"/>
+  <circle cx="78" cy="150" r="14" fill="#A8DCD9" stroke="#6FB8B2" stroke-width="6"/>
+  <circle cx="322" cy="150" r="14" fill="#A8DCD9" stroke="#6FB8B2" stroke-width="6"/>
+
+  <!-- 볼터치 -->
+  <ellipse cx="158" cy="232" rx="18" ry="12" fill="#F2B8A0"/>
+  <ellipse cx="242" cy="232" rx="18" ry="12" fill="#F2B8A0"/>
+
+  <!-- 눈 (반짝 동그란 눈) -->
+  <circle cx="176" cy="212" r="11" fill="#4A3B30"/>
+  <circle cx="224" cy="212" r="11" fill="#4A3B30"/>
+  <circle cx="180" cy="208" r="3.6" fill="#fff"/>
+  <circle cx="228" cy="208" r="3.6" fill="#fff"/>
+
+  <!-- 활짝 웃는 입 -->
+  <path d="M184 238 Q200 258 216 238 Z" fill="#4A3B30"/>
+  <path d="M186 240 Q200 249 214 240" fill="#F2B8A0"/>
+</svg>

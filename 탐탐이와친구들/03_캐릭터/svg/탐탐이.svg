@@ -1,57 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <!-- 탐탐이 — 바람 정령. 크림 몽글 1덩어리 + 정수리 6잎 꽃 + 유리병 -->
-  <defs>
-    <g id="tamtam-flower">
-      <!-- 6잎 꽃: 평상 잎 #F7C873, 시든 잎 1장은 점선 윤곽(잊혀가는 말) -->
-      <g stroke="#3E3226" stroke-width="4" stroke-linejoin="round">
-        <ellipse cx="0" cy="-30" rx="15" ry="24" fill="#F7C873"/>
-        <ellipse cx="0" cy="-30" rx="15" ry="24" fill="#F7C873" transform="rotate(60)"/>
-        <ellipse cx="0" cy="-30" rx="15" ry="24" fill="#F7C873" transform="rotate(120)"/>
-        <ellipse cx="0" cy="-30" rx="15" ry="24" fill="#FFCC5C" transform="rotate(180)"/>
-        <ellipse cx="0" cy="-30" rx="15" ry="24" fill="#F7C873" transform="rotate(240)"/>
-        <ellipse cx="0" cy="-30" rx="15" ry="24" fill="#F5EDDF" stroke-dasharray="5 4" transform="rotate(300)"/>
-      </g>
-      <circle cx="0" cy="0" r="15" fill="#E8622D" stroke="#3E3226" stroke-width="4"/>
-    </g>
-  </defs>
+  <!-- 탐탐이 — 돌하르방. 벙거지 모자·주먹코·감은 눈·배에 포갠 손. 화강암 회색 원본 HEX -->
+  <!-- 몸통색 #9A9187 / 음영 #7E766C / 조각선 #5F594F / 하이라이트 #B5ADA2 -->
 
-  <!-- 줄기 -->
-  <path d="M200 132 L200 165" stroke="#2F7A3D" stroke-width="7" stroke-linecap="round"/>
-  <!-- 꽃 (정수리 중앙) -->
-  <use href="#tamtam-flower" transform="translate(200 96)"/>
+  <!-- 바닥 그림자 -->
+  <ellipse cx="200" cy="366" rx="118" ry="16" fill="#3E3226" opacity="0.10"/>
 
-  <!-- 바람 꼬리 (하단 좌우) -->
-  <path d="M110 320 q-45 6 -60 -18 q30 6 40 -14" fill="#F5EDDF" stroke="#3E3226" stroke-width="5" stroke-linejoin="round"/>
-  <path d="M292 322 q42 10 58 -12 q-28 4 -38 -16" fill="#F5EDDF" stroke="#3E3226" stroke-width="5" stroke-linejoin="round"/>
+  <!-- 몸통+모자 한 덩어리 실루엣 (위 둥근 원통형, 바닥 살짝 평평) -->
+  <path d="M200 54
+           C136 54 92 98 92 150
+           C92 160 94 170 99 180
+           C90 214 90 254 90 292
+           C90 342 130 364 200 364
+           C270 364 310 342 310 292
+           C310 254 310 214 301 180
+           C306 170 308 160 308 150
+           C308 98 264 54 200 54 Z"
+        fill="#9A9187" stroke="#5F594F" stroke-width="7" stroke-linejoin="round"/>
 
-  <!-- 몸통 (크림 몽글, 바닥 살짝 평평) -->
-  <path d="M200 150
-           C120 150 92 210 92 258
-           C92 312 132 340 200 340
-           C268 340 308 312 308 258
-           C308 210 280 150 200 150 Z"
-        fill="#F5EDDF" stroke="#3E3226" stroke-width="6"/>
+  <!-- 오른쪽 음영 (플랫 1단계) -->
+  <path d="M301 180 C306 170 308 160 308 150 C308 118 290 88 262 70
+           C286 92 296 122 293 152 C292 162 296 172 301 180
+           C310 214 310 254 310 292 C310 330 286 351 244 359
+           C284 349 300 328 300 292 C300 254 300 214 301 180 Z"
+        fill="#7E766C" opacity="0.55"/>
 
-  <!-- 팔 스텁 (유리병 안기) -->
-  <path d="M150 288 q-22 10 -20 34" fill="none" stroke="#3E3226" stroke-width="6" stroke-linecap="round"/>
-  <path d="M250 288 q22 10 20 34" fill="none" stroke="#3E3226" stroke-width="6" stroke-linecap="round"/>
+  <!-- 모자 하이라이트 (좌상단) -->
+  <ellipse cx="158" cy="104" rx="30" ry="20" fill="#B5ADA2" opacity="0.6" transform="rotate(-24 158 104)"/>
 
-  <!-- 눈 (무심한 반달) -->
-  <path d="M158 250 q14 -14 28 0" fill="none" stroke="#3E3226" stroke-width="7" stroke-linecap="round"/>
-  <path d="M214 250 q14 -14 28 0" fill="none" stroke="#3E3226" stroke-width="7" stroke-linecap="round"/>
-  <!-- 볼 -->
-  <ellipse cx="150" cy="272" rx="17" ry="11" fill="#E8622D" opacity="0.85"/>
-  <ellipse cx="250" cy="272" rx="17" ry="11" fill="#E8622D" opacity="0.85"/>
-  <!-- 입 -->
-  <path d="M190 274 q10 8 20 0" fill="none" stroke="#3E3226" stroke-width="5" stroke-linecap="round"/>
+  <!-- 벙거지 모자 챙 조각선 -->
+  <path d="M101 178 C150 198 250 198 299 178" fill="none" stroke="#5F594F" stroke-width="6" stroke-linecap="round"/>
 
-  <!-- 코르크 유리병 (앞에 안김) -->
-  <g transform="translate(200 322)">
-    <rect x="-9" y="-40" width="18" height="12" rx="3" fill="#F7C873" stroke="#3E3226" stroke-width="4"/>
-    <path d="M-16 -28 h32 a6 6 0 0 1 6 6 v22 a10 10 0 0 1 -10 10 h-24 a10 10 0 0 1 -10 -10 v-22 a6 6 0 0 1 6 -6 Z"
-          fill="#F5EDDF" stroke="#3E3226" stroke-width="4"/>
-    <circle cx="-4" cy="-6" r="3.2" fill="#FFCC5C"/>
-    <circle cx="7" cy="2" r="2.6" fill="#FFCC5C"/>
-    <circle cx="-8" cy="6" r="2.2" fill="#FFCC5C"/>
-  </g>
+  <!-- 지그시 감은 초승달 눈 (좌·우) -->
+  <path d="M136 224 Q157 240 178 224" fill="none" stroke="#5F594F" stroke-width="7.5" stroke-linecap="round"/>
+  <path d="M222 224 Q243 240 264 224" fill="none" stroke="#5F594F" stroke-width="7.5" stroke-linecap="round"/>
+
+  <!-- 볼터치 (브랜드 주황 포인트) -->
+  <ellipse cx="146" cy="262" rx="19" ry="12" fill="#E8622D" opacity="0.55"/>
+  <ellipse cx="254" cy="262" rx="19" ry="12" fill="#E8622D" opacity="0.55"/>
+
+  <!-- 큼직한 주먹코 (중앙, 원본 승계) -->
+  <path d="M200 206
+           C180 206 172 226 174 248
+           C176 268 188 278 200 278
+           C212 278 224 268 226 248
+           C228 226 220 206 200 206 Z"
+        fill="#9A9187" stroke="#5F594F" stroke-width="6.5" stroke-linejoin="round"/>
+  <ellipse cx="190" cy="228" rx="8" ry="11" fill="#B5ADA2" opacity="0.55"/>
+
+  <!-- 온화한 미소 -->
+  <path d="M170 296 Q200 316 230 296" fill="none" stroke="#5F594F" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- 팔 (몸에 붙은 얕은 부조) -->
+  <path d="M100 258 Q94 300 140 322" fill="none" stroke="#5F594F" stroke-width="6" stroke-linecap="round"/>
+  <path d="M300 258 Q306 300 260 322" fill="none" stroke="#5F594F" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- 배 위에 포갠 두 손 (오른손 아래) -->
+  <rect x="150" y="320" width="100" height="30" rx="15" fill="#8F877D" stroke="#5F594F" stroke-width="6"/>
+  <!-- (왼손 위) -->
+  <rect x="162" y="304" width="100" height="29" rx="14.5" fill="#9A9187" stroke="#5F594F" stroke-width="6"/>
+  <path d="M200 309 L200 331" stroke="#5F594F" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
 </svg>

@@ -1,0 +1,58 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="common.css">
+<style>
+  .inner{justify-content:flex-start;padding-top:30px;}
+  .headline{font-size:38px;font-weight:800;line-height:1.35;margin-bottom:6px;}
+  .headline b{color:var(--orange);}
+  .flowerbox{margin:6px 0 4px;}
+  .flowerbox svg{width:330px;height:300px;}
+  .legend{display:flex;gap:26px;justify-content:center;margin:4px 0 14px;}
+  .legend .it{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:700;}
+  .sw{width:26px;height:26px;border-radius:50%;border:3px solid var(--ink);}
+  .desc{font-size:26px;font-weight:600;color:#5f5340;line-height:1.5;max-width:840px;}
+  .desc b{color:var(--green);font-weight:800;}
+  .chip{margin-top:20px;font-size:30px;font-weight:800;color:var(--ink);
+    background:var(--yellow);border:3px solid var(--ink);border-radius:40px;padding:14px 34px;}
+  .chip .g{font-size:22px;font-weight:600;color:#6d5f4c;margin-left:8px;}
+  .cta{margin-top:18px;font-size:28px;font-weight:800;color:#fff;background:var(--orange);
+    border-radius:40px;padding:14px 36px;}
+</style></head>
+<body><div class="card">
+  <div class="top"><h1>같이 지켜요, 제주어</h1></div>
+  <div class="body">
+    <img class="corner tl" src="flower.svg"><img class="corner tr" src="flower.svg">
+    <div class="frame"></div>
+    <div class="inner">
+      <div class="headline">댓글로 <b>제주어</b>를 따라 쓰면<br>탐탐이의 꽃잎이 다시 빛나요</div>
+      <div class="flowerbox">
+        <svg viewBox="-90 -90 180 190" xmlns="http://www.w3.org/2000/svg">
+          <defs><g id="pt"><ellipse cx="0" cy="-46" rx="22" ry="35"/></g></defs>
+          <g stroke="#3E3226" stroke-width="4.5" stroke-linejoin="round">
+            <!-- 빛나는 잎 2장: 발광 링 -->
+            <ellipse cx="0" cy="-46" rx="30" ry="43" fill="#FFCC5C" opacity="0.3" stroke="none"/>
+            <use href="#pt" fill="#FFCC5C"/>
+            <g transform="rotate(60)"><ellipse cx="0" cy="-46" rx="30" ry="43" fill="#FFCC5C" opacity="0.3" stroke="none"/><use href="#pt" fill="#FFCC5C"/></g>
+            <!-- 평상 잎 3장 -->
+            <use href="#pt" fill="#F7C873" transform="rotate(120)"/>
+            <use href="#pt" fill="#F7C873" transform="rotate(180)"/>
+            <use href="#pt" fill="#F7C873" transform="rotate(240)"/>
+            <!-- 시든 잎 1장 -->
+            <use href="#pt" fill="#F5EDDF" stroke-dasharray="6 5" transform="rotate(300)"/>
+          </g>
+          <circle cx="0" cy="0" r="21" fill="#E8622D" stroke="#3E3226" stroke-width="4.5"/>
+          <path d="M0 21 L0 60" stroke="#2F7A3D" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="legend">
+        <div class="it"><span class="sw" style="background:#FFCC5C"></span>빛나는 잎</div>
+        <div class="it"><span class="sw" style="background:#F7C873"></span>살아있는 말</div>
+        <div class="it"><span class="sw" style="background:#F5EDDF;border-style:dashed"></span>잊혀가는 말</div>
+      </div>
+      <div class="desc">한 마디 따라 쓰는 것도 <b>지키는 것</b>.<br>여러분이 따라 쓸 때마다 다음 화에서 꽃잎 하나가 빛나요.</div>
+      <div class="chip">혼저옵서예<span class="g">어서 오세요</span></div>
+      <div class="cta">댓글에 오늘의 한 마디를 따라 써 주세요</div>
+    </div>
+  </div>
+  <div class="credit">제주어 감수: 제주어연구소 감수 예정 · 수익의 5%는 제주어 보존 활동에 · ⓒ탐탐이와 친구들</div>
+  <div class="bottom"><span>@tamnaground</span></div>
+</div></body></html>

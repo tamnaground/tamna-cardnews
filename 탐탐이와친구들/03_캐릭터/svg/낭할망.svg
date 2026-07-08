@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- 낭할망 — 팽나무(폭낭) 할망 정령. 종형 밑동 + 구름 캐노피, 가지 팔 팔짱 -->
+
+  <!-- 떨어지는 잎사귀 한 장 (여백 연출) -->
+  <path d="M318 150 q14 6 8 22 q-14 -4 -8 -22 Z" fill="#BCD9A0" stroke="#3E3226" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M322 156 l0 12" stroke="#3E3226" stroke-width="2.5"/>
+
+  <!-- 잎 캐노피 (구름 3~4덩이 초록) -->
+  <g stroke="#3E3226" stroke-width="6" stroke-linejoin="round">
+    <circle cx="140" cy="120" r="52" fill="#2F7A3D"/>
+    <circle cx="248" cy="116" r="56" fill="#2F7A3D"/>
+    <circle cx="196" cy="96" r="58" fill="#2F7A3D"/>
+    <circle cx="200" cy="150" r="62" fill="#2F7A3D"/>
+  </g>
+  <!-- 캐노피 하이라이트 덩이 -->
+  <circle cx="150" cy="108" r="22" fill="#BCD9A0"/>
+  <circle cx="248" cy="104" r="26" fill="#BCD9A0"/>
+
+  <!-- 종형 밑동 (치마처럼 퍼진 줄기) -->
+  <path d="M158 176
+           C150 210 132 300 118 348
+           L282 348
+           C268 300 250 210 242 176 Z"
+        fill="#3E3226" stroke="#3E3226" stroke-width="6" stroke-linejoin="round"/>
+  <!-- 밑동 나뭇결 -->
+  <path d="M170 220 q6 60 -18 116 M230 220 q-6 60 18 116" fill="none" stroke="#F5EDDF" stroke-width="3" opacity="0.35" stroke-linecap="round"/>
+
+  <!-- 얼굴 (줄기 상부 크림 둥근 면) -->
+  <ellipse cx="200" cy="204" rx="52" ry="46" fill="#F5EDDF" stroke="#3E3226" stroke-width="6"/>
+
+  <!-- 가지 팔 2개 (둥근 스텁, 팔짱) -->
+  <path d="M158 214 q-40 8 -34 40 q30 4 44 -14" fill="#3E3226" stroke="#3E3226" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M242 214 q40 8 34 40 q-30 4 -44 -14" fill="#3E3226" stroke="#3E3226" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M168 248 q32 14 64 0" fill="none" stroke="#3E3226" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- 눈 (지그시) + 눈가 주름 2획 -->
+  <path d="M172 200 q12 -8 24 0" fill="none" stroke="#3E3226" stroke-width="6" stroke-linecap="round"/>
+  <path d="M204 200 q12 -8 24 0" fill="none" stroke="#3E3226" stroke-width="6" stroke-linecap="round"/>
+  <path d="M158 190 q8 -4 14 -2 M228 188 q6 -2 14 2" fill="none" stroke="#3E3226" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- 볼 -->
+  <ellipse cx="164" cy="216" rx="15" ry="10" fill="#E8622D" opacity="0.8"/>
+  <ellipse cx="236" cy="216" rx="15" ry="10" fill="#E8622D" opacity="0.8"/>
+  <!-- 온화한 입 -->
+  <path d="M186 224 q14 10 28 0" fill="none" stroke="#3E3226" stroke-width="5" stroke-linecap="round"/>
+</svg>

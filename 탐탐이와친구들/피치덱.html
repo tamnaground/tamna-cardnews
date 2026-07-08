@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>탐탐이와 친구들 — 피치덱</title>
+<style>
+  :root{
+    --cream:#F5EDDF; --orange:#E8622D; --yellow:#FFCC5C; --yellow2:#F7C873;
+    --green:#2F7A3D; --green2:#BCD9A0; --blue:#1D5BB8; --blue2:#2563AC;
+    --pink:#F2A9C4; --ink:#3E3226;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+            "Malgun Gothic", "Noto Sans KR", "맑은 고딕", sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:var(--font); color:var(--ink); background:#2a2118;
+    overflow:hidden; -webkit-font-smoothing:antialiased;
+    word-break:keep-all; overflow-wrap:break-word;
+  }
+  /* stage */
+  #stage{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  }
+  .slide{
+    position:absolute; inset:0; display:none; flex-direction:column;
+    padding:6.2vh 7vw 8vh; background:var(--cream); overflow:auto;
+    background-image:radial-gradient(circle at 12% 18%, rgba(255,204,92,.10), transparent 42%),
+                     radial-gradient(circle at 88% 82%, rgba(47,122,61,.08), transparent 45%);
+  }
+  .slide.active{display:flex; animation:fade .5s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+
+  /* dotted frame */
+  .frame{position:absolute; inset:2.4vh 2.4vw; border:2.5px dashed var(--ink);
+         border-radius:26px; opacity:.28; pointer-events:none;}
+
+  /* generic type */
+  .kicker{font-size:clamp(12px,1.5vw,17px); font-weight:800; letter-spacing:.14em;
+          text-transform:uppercase; color:var(--orange); margin-bottom:1.4vh;}
+  h1{font-size:clamp(30px,5.6vw,66px); line-height:1.12; font-weight:900; letter-spacing:-.01em;}
+  h2{font-size:clamp(24px,3.7vw,44px); line-height:1.18; font-weight:900; letter-spacing:-.01em;}
+  h2 .hl{color:var(--orange);}
+  .lead{font-size:clamp(15px,1.9vw,23px); line-height:1.6; max-width:60ch; color:#5c4f3d;}
+  .num{font-weight:900; color:var(--orange);}
+  .foot{position:absolute; left:7vw; right:7vw; bottom:3vh;
+        font-size:clamp(9px,1vw,12px); color:#8a7c67; line-height:1.5;
+        border-top:1px solid rgba(62,50,38,.16); padding-top:1vh;
+        padding-right:14vw;}
+  .foot b{color:#6b5d47;}
+
+  /* chips / cards */
+  .row{display:flex; gap:1.4vw; flex-wrap:wrap;}
+  .stat{background:#fff; border:2px solid var(--ink); border-radius:18px;
+        padding:2.4vh 1.9vw; flex:1 1 0; min-width:170px;
+        box-shadow:4px 5px 0 rgba(62,50,38,.14);}
+  .stat .big{font-size:clamp(26px,3.6vw,44px); font-weight:900; color:var(--orange); line-height:1;}
+  .stat .lbl{margin-top:1vh; font-size:clamp(12px,1.3vw,16px); color:#5c4f3d; line-height:1.4; font-weight:600;}
+
+  table{width:100%; border-collapse:separate; border-spacing:0; font-size:clamp(11px,1.35vw,17px);}
+  th,td{text-align:left; padding:1.35vh 1.1vw; border-bottom:1.5px solid rgba(62,50,38,.16); vertical-align:top;}
+  th{background:var(--ink); color:var(--cream); font-weight:800;}
+  th:first-child{border-top-left-radius:12px;} th:last-child{border-top-right-radius:12px;}
+  tr:last-child td{border-bottom:none;}
+  td .em{color:var(--orange); font-weight:800;}
+  .rank{display:inline-flex; width:1.7em; height:1.7em; border-radius:50%; background:var(--orange);
+        color:#fff; font-weight:900; align-items:center; justify-content:center; font-size:.85em;}
+
+  /* nav */
+  #nav{position:fixed; bottom:2.4vh; right:2.4vw;
+       display:flex; align-items:center; gap:14px; z-index:20;}
+  .navbtn{width:44px; height:44px; border-radius:50%; border:2px solid var(--ink);
+          background:var(--cream); color:var(--ink); font-size:20px; cursor:pointer;
+          display:flex; align-items:center; justify-content:center; font-weight:900;
+          box-shadow:2px 3px 0 rgba(62,50,38,.2); transition:transform .1s;}
+  .navbtn:hover{transform:translateY(-2px); background:var(--yellow);}
+  .navbtn:active{transform:translateY(0);}
+  #counter{font-size:14px; font-weight:800; color:var(--cream); min-width:56px; text-align:center;}
+  #progress{position:fixed; top:0; left:0; height:5px; background:var(--orange); z-index:30;
+            transition:width .35s ease;}
+  .hint{position:fixed; bottom:2.6vh; left:2.4vw; font-size:11px; color:#cbb99a; z-index:20;
+        animation:hintfade 5s ease forwards;}
+  @keyframes hintfade{0%,70%{opacity:1;} 100%{opacity:0; visibility:hidden;}}
+
+  /* layout helpers */
+  .split{display:flex; gap:3vw; align-items:center; flex:1;}
+  .split .txt{flex:1.2;} .split .art{flex:1; display:flex; align-items:center; justify-content:center;}
+  .mt{margin-top:2.4vh;} .mt-s{margin-top:1.4vh;}
+  .tag{display:inline-block; background:var(--green2); color:var(--green); font-weight:800;
+       padding:.5vh 1vw; border-radius:999px; font-size:clamp(11px,1.2vw,15px); border:1.5px solid var(--green);}
+  .tag.o{background:#fbe0d4; color:var(--orange); border-color:var(--orange);}
+  .tag.b{background:#d7e2f5; color:var(--blue); border-color:var(--blue);}
+
+  ul.clean{list-style:none; display:flex; flex-direction:column; gap:1.5vh; margin-top:1vh;}
+  ul.clean li{display:flex; gap:.9vw; font-size:clamp(14px,1.7vw,21px); line-height:1.45; color:#4a3f30;}
+  ul.clean li .dot{flex:none; width:1.5em; height:1.5em; border-radius:50%; background:var(--orange);
+        color:#fff; font-weight:900; display:flex; align-items:center; justify-content:center; font-size:.85em; margin-top:.1em;}
+
+  /* character card grid */
+  .chargrid{display:grid; grid-template-columns:repeat(5,1fr); gap:1.2vw; flex:1; align-content:center;}
+  .card{background:#fff; border:2px solid var(--ink); border-radius:18px; padding:1.8vh 1vw;
+        display:flex; flex-direction:column; align-items:center; text-align:center;
+        box-shadow:3px 4px 0 rgba(62,50,38,.14);}
+  .card svg{width:100%; height:auto; max-height:15vh;}
+  .card .cname{font-weight:900; font-size:clamp(14px,1.5vw,20px); margin-top:.8vh;}
+  .card .crole{font-size:clamp(10px,1.05vw,13px); color:#7a6c56; margin-top:.3vh; line-height:1.3;}
+  .card .cline{margin-top:.9vh; font-size:clamp(11px,1.2vw,15px); font-weight:800; color:var(--orange);
+        background:var(--cream); border-radius:999px; padding:.4vh .7vw;}
+  .card .ctr{font-size:clamp(9px,.95vw,12px); color:#9a8b73; margin-top:.3vh;}
+
+  .roadmap{display:grid; grid-template-columns:repeat(4,1fr); gap:1.3vw; flex:1; align-content:center;}
+  .q{background:#fff; border:2px solid var(--ink); border-radius:16px; padding:2vh 1.2vw;
+     box-shadow:3px 4px 0 rgba(62,50,38,.14); display:flex; flex-direction:column;}
+  .q .qh{font-weight:900; color:var(--orange); font-size:clamp(14px,1.5vw,20px);}
+  .q .qd{font-size:clamp(10px,1.1vw,13px); color:#8a7c67; font-weight:700; margin-bottom:1vh;}
+  .q .qt{font-weight:800; font-size:clamp(12px,1.35vw,16px); margin-bottom:1vh; line-height:1.25;}
+  .q ul{list-style:none; display:flex; flex-direction:column; gap:.7vh;}
+  .q li{font-size:clamp(10px,1.15vw,14px); color:#4a3f30; line-height:1.35; padding-left:1em; position:relative;}
+  .q li::before{content:"·"; position:absolute; left:0; color:var(--orange); font-weight:900;}
+
+  .adv{display:grid; grid-template-columns:repeat(3,1fr); gap:1.6vw; flex:1; align-content:center;}
+  .advc{background:#fff; border:2px solid var(--ink); border-radius:20px; padding:3vh 1.6vw;
+        box-shadow:4px 5px 0 rgba(62,50,38,.14);}
+  .advc .ico{width:56px; height:56px; border-radius:14px; display:flex; align-items:center; justify-content:center;
+        font-size:30px; margin-bottom:1.6vh; border:2px solid var(--ink);}
+  .advc h3{font-size:clamp(16px,1.9vw,24px); font-weight:900; margin-bottom:1vh;}
+  .advc p{font-size:clamp(12px,1.35vw,17px); color:#5c4f3d; line-height:1.5;}
+
+  .jeju{color:var(--orange); font-weight:900;}
+  .std{color:#8a7c67; font-weight:600; font-size:.72em;}
+
+  /* cover */
+  #s1{align-items:center; justify-content:center; text-align:center;
+      background:linear-gradient(160deg,#F5EDDF 0%, #f7e6cf 100%);}
+  #s1 h1{max-width:20ch;}
+  #s1 .sub{margin-top:2.6vh; font-size:clamp(16px,2.2vw,27px); color:var(--orange); font-weight:800;}
+  #s1 .who{margin-top:1.4vh; font-size:clamp(13px,1.5vw,18px); color:#7a6c56; font-weight:700;}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="stage">
+
+  <!-- SLIDE 1 — 표지 -->
+  <section class="slide active" id="s1">
+    <div class="frame"></div>
+    <div style="margin-bottom:1vh">
+      <!-- 탐탐이 hero -->
+      <svg viewBox="0 0 200 180" width="min(30vw,240px)" aria-label="탐탐이">
+        <!-- bind wind tails -->
+        <path d="M40 150 q-22 4 -30 -8 q16 2 24 -6z" fill="#F7C873" stroke="#3E3226" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M160 150 q22 4 30 -8 q-16 2 -24 -6z" fill="#F7C873" stroke="#3E3226" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- body -->
+        <ellipse cx="100" cy="118" rx="60" ry="52" fill="#F5EDDF" stroke="#3E3226" stroke-width="3.2"/>
+        <!-- cheeks -->
+        <ellipse cx="72" cy="126" rx="11" ry="8" fill="#E8622D"/>
+        <ellipse cx="128" cy="126" rx="11" ry="8" fill="#E8622D"/>
+        <!-- eyes -->
+        <path d="M84 112 a7 7 0 0 1 14 0" fill="none" stroke="#3E3226" stroke-width="4" stroke-linecap="round"/>
+        <path d="M108 112 a7 7 0 0 1 14 0" fill="none" stroke="#3E3226" stroke-width="4" stroke-linecap="round"/>
+        <path d="M96 128 q8 6 16 0" fill="none" stroke="#3E3226" stroke-width="3" stroke-linecap="round"/>
+        <!-- jar -->
+        <g transform="translate(100,150)">
+          <rect x="-14" y="-2" width="28" height="26" rx="7" fill="#fff" stroke="#3E3226" stroke-width="2.5"/>
+          <rect x="-9" y="-9" width="18" height="9" rx="2" fill="#F7C873" stroke="#3E3226" stroke-width="2.5"/>
+          <circle cx="-4" cy="10" r="2.4" fill="#FFCC5C"/><circle cx="5" cy="14" r="2" fill="#FFCC5C"/><circle cx="2" cy="5" r="1.8" fill="#FFCC5C"/>
+        </g>
+        <!-- stem -->
+        <path d="M100 66 v-8" stroke="#2F7A3D" stroke-width="4" stroke-linecap="round"/>
+        <!-- 6-leaf flower -->
+        <g transform="translate(100,44)">
+          <g fill="#F7C873" stroke="#3E3226" stroke-width="2.4">
+            <ellipse cx="0" cy="-13" rx="7" ry="11"/>
+            <ellipse cx="0" cy="-13" rx="7" ry="11" transform="rotate(60)"/>
+            <ellipse cx="0" cy="-13" rx="7" ry="11" transform="rotate(120)"/>
+            <ellipse cx="0" cy="-13" rx="7" ry="11" transform="rotate(180)"/>
+            <ellipse cx="0" cy="-13" rx="7" ry="11" transform="rotate(240)"/>
+            <ellipse cx="0" cy="-13" rx="7" ry="11" transform="rotate(300)"/>
+          </g>
+          <circle r="7" fill="#E8622D" stroke="#3E3226" stroke-width="2.4"/>
+        </g>
+      </svg>
+    </div>
+    <div class="kicker">탐라그라운드 · 제주어 캐릭터 IP</div>
+    <h1>탐탐이와 친구들<br><span style="color:var(--orange)">사라져가는 제주어를, 매일 쓰는 말로</span></h1>
+    <div class="sub">"탐탐이는 '제주 캐릭터'가 아니다. '제주어를 쓰는 캐릭터'다."</div>
+    <div class="who">@tamnaground · 1인 크리에이터 · AI 제작 파이프라인 · 2026.07</div>
+  </section>
+
+  <!-- SLIDE 2 — 문제 -->
+  <section class="slide" id="s2">
+    <div class="frame"></div>
+    <div class="kicker">The Problem · 문제</div>
+    <h2>제주어는 <span class="hl">박물관으로 가는 중</span>입니다.</h2>
+    <p class="lead mt-s">유네스코는 2010년 12월 제주어를 <b>'아주 심각한 위기(critically endangered)'</b> — 소멸 5단계 중 4단계 언어로 분류했습니다. 정책은 있지만, 정작 사람들이 <b>매일 쓰는 말</b>에서는 빠르게 사라지고 있습니다.</p>
+    <div class="row mt">
+      <div class="stat"><div class="big">4단계</div><div class="lbl">유네스코 소멸위기 등급<br>(5단계 중 · 2010.12)</div></div>
+      <div class="stat"><div class="big">160억원</div><div class="lbl">제4차 제주어 발전 기본계획<br>(2023~2027) — 그러나 '보존' 중심</div></div>
+      <div class="stat"><div class="big">0</div><div class="lbl">제주어의 '말' 자체를<br>세계관으로 삼은 캐릭터 IP</div></div>
+    </div>
+    <p class="lead mt"><b>적은 '악당'이 아니라 '잊힘'입니다.</b> 언어는 정책이 아니라 콘텐츠로 살아납니다 — 아이누어를 살린 건 '골든 카무이'였습니다.</p>
+    <div class="foot"><b>출처</b> 유네스코 소멸위기 언어 분류(2010.12), 제4차 제주어 발전 기본계획(2023~2027, 160억원) — 종합리서치보고서 3.5·1장. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 3 — 타이밍 -->
+  <section class="slide" id="s3">
+    <div class="frame"></div>
+    <div class="kicker">The Timing · 골든타임</div>
+    <h2>'폭싹 속았수다' 후광이 <span class="hl">아직 켜져 있습니다.</span></h2>
+    <p class="lead mt-s"><span class="jeju">폭싹 속았수다</span> <span class="std">(수고하셨습니다)</span> — 이 한 마디가 전국에 제주어 수요를 만들었습니다. 특수는 <b>반드시 꺼집니다.</b> 후광이 남은 지금, 자체 IP 팬덤으로 전환할 시간입니다.</p>
+    <div class="row mt">
+      <div class="stat"><div class="big">3,480만</div><div class="lbl">'폭싹 속았수다'<br>2025 상반기 시청수</div></div>
+      <div class="stat"><div class="big">월 220만회</div><div class="lbl">제주어 유튜브 조회수<br>(2024년 월 최고치의 2배+)</div></div>
+      <div class="stat"><div class="big">2026</div><div class="lbl">후광이 남은 골든타임<br>— 전환 못 하면 관심도 꺼진다</div></div>
+    </div>
+    <p class="lead mt">전략: 편승 시리즈('드라마 속 그 제주어')로 <b>유입</b> → 세계관 팬덤으로 <b>전환</b>. 편승 콘텐츠는 유입 전용, 90일 내 회유 링크 구조.</p>
+    <div class="foot"><b>출처</b> '폭싹 속았수다' 2025 상반기 시청수 3,480만·제주어 유튜브 월 조회수 220만회(2024 월 최고치 2배+) — 종합리서치보고서 1장·4.3. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 4 — 시장 -->
+  <section class="slide" id="s4">
+    <div class="frame"></div>
+    <div class="kicker">The Market · 시장</div>
+    <h2>캐릭터 굿즈는 <span class="hl">틈새가 아니라 대중 소비재</span>입니다.</h2>
+    <p class="lead mt-s">소비 주도층은 아동이 아닌 <b>2030 '어른이'</b>. 제품 문법도 '아이 장난감'에서 '데스크테리어·키링·가치소비 굿즈'로 옮겨갔습니다.</p>
+    <div class="row mt">
+      <div class="stat"><div class="big">11.5조원</div><div class="lbl">국내 캐릭터 산업 매출<br>(2023년, 콘진원)</div></div>
+      <div class="stat"><div class="big">81.5%</div><div class="lbl">캐릭터 상품 <b>구매 경험</b><br>(이용 경험 95.7%)</div></div>
+      <div class="stat"><div class="big">45.5%</div><div class="lbl">팝업스토어<br>방문 경험</div></div>
+      <div class="stat"><div class="big">89.8%</div><div class="lbl">텀블벅 이용자 여성 비중<br>— 1020 중심, 타깃과 일치</div></div>
+    </div>
+    <p class="lead mt">1차 타깃 = <b>1030 여성</b>(제주 여행자·이주민·'폭싹 속았수다' 시청자). 캐릭터를 '공부'가 아닌 '감성 밈'으로 소비하는 집단.</p>
+    <div class="foot"><b>출처</b> 캐릭터 산업 매출 11.5조원(2023, 콘진원)·구매 경험 81.5%·이용 95.7%·팝업 45.5%(2024 캐릭터 이용자 조사)·텀블벅 여성 89.8% — 종합리서치보고서 2.1·2.2·5.2. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 5 — 공백 -->
+  <section class="slide" id="s5">
+    <div class="frame"></div>
+    <div class="kicker">The Gap · 경쟁 공백</div>
+    <h2>비주얼 모티프는 <span class="hl">포화</span>, '말' IP는 <span class="hl">공백</span>.</h2>
+    <div class="split mt-s">
+      <div class="txt">
+        <p class="lead">해녀·감귤·돌하르방은 모두 <b>비주얼</b> 모티프입니다 — 이미 선점됐습니다. 하지만 소멸위기 언어인 제주어의 <b>'말' 자체</b>를 대사 시스템·말버릇·세계관의 심장으로 삼은 IP는 <span class="jeju">어신디</span> <span class="std">(없는데)</span>.</p>
+        <table class="mt">
+          <tr><th>선점된 영역</th><th>모티프</th><th>상태</th></tr>
+          <tr><td>몽니</td><td>해녀</td><td>비주얼 선점</td></tr>
+          <tr><td>귤메달</td><td>감귤</td><td>비주얼 선점</td></tr>
+          <tr><td>돌이와 소리</td><td>돌하르방</td><td>공공 홍보용</td></tr>
+          <tr><td class="em">탐탐이</td><td class="em">제주어(말)</td><td class="em">공백 — 유일 포지션</td></tr>
+        </table>
+      </div>
+      <div class="art">
+        <div style="text-align:center">
+          <div style="font-size:clamp(30px,4.5vw,58px); font-weight:900; color:var(--orange); line-height:1.1">숏폼 + AI<br>파이프라인</div>
+          <div class="lead" style="margin-top:1.6vh; max-width:22ch">저비용 캐릭터 콘텐츠 영역엔 <b>경쟁자가 사실상 부재</b>합니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><b>출처</b> 제주 캐릭터 IP 지형(몽니·귤메달·돌이와 소리)·경쟁 공백 검증 — 종합리서치보고서 4.1·4.2. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 6 — 솔루션 -->
+  <section class="slide" id="s6">
+    <div class="frame"></div>
+    <div class="kicker">The Solution · 솔루션</div>
+    <h2>세계관이 곧 <span class="hl">발행 시스템</span>입니다.</h2>
+    <div class="split mt-s">
+      <div class="txt">
+        <p class="lead">바람 정령 <b>탐탐이</b>는 사라져가는 제주어를 주워 유리병에 모으고, <b>매일 한 마디씩</b> 당신에게 부칩니다. 제주어가 잊히면 머리 위 <b>6잎 꽃</b>이 한 잎 시들고, 누군가 다시 쓰면 꽃잎이 <span class="jeju">베롱베롱</span> <span class="std">(반짝반짝)</span>【감수 필요】 빛납니다.</p>
+        <ul class="clean mt-s">
+          <li><span class="dot">1</span><div><b>6잎 꽃 = 제주어 생명력 게이지.</b> 카드뉴스 6잎 꽃 모티프를 캐릭터 신체로 1:1 승격.</div></li>
+          <li><span class="dot">2</span><div><b>시청자가 곧 구원자.</b> 댓글로 따라 쓰면 다음 화에 꽃잎이 빛난다 — "한 마디 따라 쓰는 것도 지키는 것".</div></li>
+          <li><span class="dot">3</span><div><b>적은 잊힘, 빌런은 없다.</b> 전투 없이 정서는 항상 '위로'로 귀결.</div></li>
+        </ul>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 220 200" width="min(28vw,260px)" aria-label="6잎 꽃 상태">
+          <text x="110" y="16" text-anchor="middle" font-size="13" font-weight="800" fill="#3E3226">꽃잎 3단계</text>
+          <!-- lit -->
+          <g transform="translate(50,70)">
+            <circle r="34" fill="#fff8e8" opacity=".8"/>
+            <g fill="#FFCC5C" stroke="#3E3226" stroke-width="2">
+              <ellipse cx="0" cy="-16" rx="8" ry="13"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(60)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(120)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(180)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(240)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(300)"/>
+            </g><circle r="8" fill="#E8622D" stroke="#3E3226" stroke-width="2"/>
+            <text x="0" y="52" text-anchor="middle" font-size="12" font-weight="800" fill="#E8622D">빛나는 잎</text>
+            <text x="0" y="66" text-anchor="middle" font-size="10" fill="#7a6c56">다시 쓴 말</text>
+          </g>
+          <!-- normal -->
+          <g transform="translate(120,70)">
+            <g fill="#F7C873" stroke="#3E3226" stroke-width="2">
+              <ellipse cx="0" cy="-16" rx="8" ry="13"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(60)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(120)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(180)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(240)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(300)"/>
+            </g><circle r="8" fill="#E8622D" stroke="#3E3226" stroke-width="2"/>
+            <text x="0" y="52" text-anchor="middle" font-size="12" font-weight="800" fill="#5c4f3d">평상 잎</text>
+            <text x="0" y="66" text-anchor="middle" font-size="10" fill="#7a6c56">살아있는 말</text>
+          </g>
+          <!-- withered -->
+          <g transform="translate(185,70)">
+            <g fill="#F5EDDF" stroke="#3E3226" stroke-width="1.6" stroke-dasharray="3 2.5">
+              <ellipse cx="0" cy="-16" rx="8" ry="13"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(60)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(120)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(180)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(240)"/><ellipse cx="0" cy="-16" rx="8" ry="13" transform="rotate(300)"/>
+            </g><circle r="8" fill="#F5EDDF" stroke="#3E3226" stroke-width="1.6"/>
+            <text x="0" y="52" text-anchor="middle" font-size="12" font-weight="800" fill="#8a7c67">시든 잎</text>
+            <text x="0" y="66" text-anchor="middle" font-size="10" fill="#9a8b73">잊혀가는 말</text>
+          </g>
+          <text x="110" y="176" text-anchor="middle" font-size="11" fill="#7a6c56">※ 6잎 전멸 금지 — IP의 죽음. 최대 위기는 5잎까지</text>
+        </svg>
+      </div>
+    </div>
+    <div class="foot"><b>출처</b> 세계관 확정안·캐릭터바이블 1.5(6잎 꽃 시스템). 【감수 필요】 표기 표현은 발행 전 감수. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 7 — 캐릭터 -->
+  <section class="slide" id="s7">
+    <div class="kicker" style="position:absolute; top:5vh; left:7vw">The Cast · 캐릭터 5명</div>
+    <h2 style="position:absolute; top:8.4vh; left:7vw; right:7vw">말 한 마디가 <span class="hl">세상을 도는 순환 구조</span> — 다섯이 모이면 '말의 생태계'</h2>
+    <div class="chargrid" style="margin-top:15vh">
+      <!-- 탐탐이 -->
+      <div class="card">
+        <svg viewBox="0 0 120 120" aria-label="탐탐이">
+          <ellipse cx="60" cy="78" rx="38" ry="33" fill="#F5EDDF" stroke="#3E3226" stroke-width="2.5"/>
+          <ellipse cx="42" cy="84" rx="7" ry="5" fill="#E8622D"/><ellipse cx="78" cy="84" rx="7" ry="5" fill="#E8622D"/>
+          <circle cx="50" cy="74" r="2.6" fill="#3E3226"/><circle cx="70" cy="74" r="2.6" fill="#3E3226"/>
+          <path d="M54 86 q6 4 12 0" fill="none" stroke="#3E3226" stroke-width="2" stroke-linecap="round"/>
+          <path d="M60 46 v-6" stroke="#2F7A3D" stroke-width="3"/>
+          <g transform="translate(60,30)"><g fill="#F7C873" stroke="#3E3226" stroke-width="1.8">
+            <ellipse cx="0" cy="-9" rx="5" ry="8"/><ellipse cx="0" cy="-9" rx="5" ry="8" transform="rotate(60)"/><ellipse cx="0" cy="-9" rx="5" ry="8" transform="rotate(120)"/><ellipse cx="0" cy="-9" rx="5" ry="8" transform="rotate(180)"/><ellipse cx="0" cy="-9" rx="5" ry="8" transform="rotate(240)"/><ellipse cx="0" cy="-9" rx="5" ry="8" transform="rotate(300)"/>
+          </g><circle r="5" fill="#E8622D" stroke="#3E3226" stroke-width="1.8"/></g>
+        </svg>
+        <div class="cname">탐탐이</div>
+        <div class="crole">바람 정령 · 말을 줍는 자</div>
+        <div class="cline">~마씸</div>
+        <div class="ctr">먹엉 갑서마씸</div>
+      </div>
+      <!-- 몽생이 -->
+      <div class="card">
+        <svg viewBox="0 0 120 120" aria-label="몽생이">
+          <ellipse cx="60" cy="84" rx="34" ry="24" fill="#FFCC5C" stroke="#3E3226" stroke-width="2.5"/>
+          <rect x="40" y="98" width="8" height="14" rx="4" fill="#FFCC5C" stroke="#3E3226" stroke-width="2.5"/>
+          <rect x="72" y="98" width="8" height="14" rx="4" fill="#FFCC5C" stroke="#3E3226" stroke-width="2.5"/>
+          <circle cx="60" cy="56" r="26" fill="#FFCC5C" stroke="#3E3226" stroke-width="2.5"/>
+          <path d="M40 40 q-6 -8 2 -12 q4 8 10 8z" fill="#E8622D" stroke="#3E3226" stroke-width="2"/>
+          <path d="M54 34 q-4 -10 4 -12 q2 8 8 10z" fill="#E8622D" stroke="#3E3226" stroke-width="2"/>
+          <path d="M38 58 q-8 6 -2 14" fill="none" stroke="#E8622D" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="60" cy="66" rx="12" ry="8" fill="#F5EDDF"/>
+          <circle cx="52" cy="54" r="2.6" fill="#3E3226"/><circle cx="68" cy="54" r="2.6" fill="#3E3226"/>
+          <ellipse cx="46" cy="62" rx="5" ry="3.5" fill="#E8622D"/><ellipse cx="74" cy="62" rx="5" ry="3.5" fill="#E8622D"/>
+        </svg>
+        <div class="cname">몽생이</div>
+        <div class="crole">제주마 · 말을 나르는 자</div>
+        <div class="cline">혼저혼저!</div>
+        <div class="ctr">어서어서!</div>
+      </div>
+      <!-- 돌돌이 -->
+      <div class="card">
+        <svg viewBox="0 0 120 120" aria-label="돌돌이">
+          <ellipse cx="60" cy="80" rx="36" ry="30" fill="#3E3226" stroke="#3E3226" stroke-width="2.5"/>
+          <path d="M26 66 q34 -26 68 0 q-14 -14 -34 -14 q-20 0 -34 14z" fill="#BCD9A0" stroke="#3E3226" stroke-width="2.5"/>
+          <path d="M60 52 q18 -2 30 12 q-8 -2 -14 2z" fill="#2F7A3D"/>
+          <path d="M46 78 a5 5 0 0 1 10 0" fill="none" stroke="#F5EDDF" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M64 78 a5 5 0 0 1 10 0" fill="none" stroke="#F5EDDF" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="42" cy="88" rx="5" ry="3.5" fill="#E8622D"/><ellipse cx="78" cy="88" rx="5" ry="3.5" fill="#E8622D"/>
+          <circle cx="50" cy="98" r="1.6" fill="#F5EDDF"/><circle cx="70" cy="94" r="1.6" fill="#F5EDDF"/><circle cx="60" cy="102" r="1.6" fill="#F5EDDF"/>
+        </svg>
+        <div class="cname">돌돌이</div>
+        <div class="crole">현무암 · 말을 듣는 자</div>
+        <div class="cline">...기여.</div>
+        <div class="ctr">…맞아.</div>
+      </div>
+      <!-- 서월이 -->
+      <div class="card">
+        <svg viewBox="0 0 120 120" aria-label="서월이">
+          <ellipse cx="60" cy="70" rx="30" ry="34" fill="#2563AC" stroke="#3E3226" stroke-width="2.5"/>
+          <path d="M60 38 q4 -10 10 -8 q-2 8 -4 10z" fill="#1D5BB8" stroke="#3E3226" stroke-width="2"/>
+          <path d="M78 92 l10 12 M82 88 l12 6" stroke="#2563AC" stroke-width="4" stroke-linecap="round"/>
+          <ellipse cx="60" cy="76" rx="18" ry="20" fill="#F5EDDF"/>
+          <circle cx="50" cy="66" r="9" fill="none" stroke="#3E3226" stroke-width="2.2"/>
+          <circle cx="70" cy="66" r="9" fill="none" stroke="#3E3226" stroke-width="2.2"/>
+          <line x1="59" y1="66" x2="61" y2="66" stroke="#3E3226" stroke-width="2.2"/>
+          <circle cx="50" cy="66" r="2.4" fill="#3E3226"/><circle cx="70" cy="66" r="2.4" fill="#3E3226"/>
+          <path d="M56 80 l4 4 l4 -4z" fill="#F7C873" stroke="#3E3226" stroke-width="1.6"/>
+          <ellipse cx="42" cy="80" rx="4.5" ry="3" fill="#E8622D"/><ellipse cx="78" cy="80" rx="4.5" ry="3" fill="#E8622D"/>
+        </svg>
+        <div class="cname">서월이</div>
+        <div class="crole">직박구리 · 말을 배우는 자</div>
+        <div class="cline">...맛있...수다?</div>
+        <div class="ctr">시청자 대리인</div>
+      </div>
+      <!-- 낭할망 -->
+      <div class="card">
+        <svg viewBox="0 0 120 120" aria-label="낭할망">
+          <path d="M40 110 q0 -30 20 -30 q20 0 20 30z" fill="#3E3226"/>
+          <path d="M26 58 q34 -34 68 0 q6 22 -14 26 q-20 4 -40 0 q-20 -4 -14 -26z" fill="#2F7A3D" stroke="#3E3226" stroke-width="2.5"/>
+          <path d="M34 50 q12 -12 26 -8 q-10 -2 -18 6z" fill="#BCD9A0"/>
+          <path d="M70 46 q14 -6 24 8 q-10 -6 -20 -2z" fill="#BCD9A0"/>
+          <ellipse cx="60" cy="72" rx="16" ry="13" fill="#F5EDDF"/>
+          <path d="M50 68 q4 -3 8 0 M62 68 q4 -3 8 0" fill="none" stroke="#3E3226" stroke-width="2" stroke-linecap="round"/>
+          <path d="M56 78 q4 3 8 0" fill="none" stroke="#3E3226" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="48" cy="76" rx="4.5" ry="3" fill="#E8622D"/><ellipse cx="72" cy="76" rx="4.5" ry="3" fill="#E8622D"/>
+        </svg>
+        <div class="cname">낭할망</div>
+        <div class="crole">폭낭 정령 · 정답을 아는 자</div>
+        <div class="cline">게메이~</div>
+        <div class="ctr">감수 체계의 화신</div>
+      </div>
+    </div>
+    <p class="lead" style="text-align:center; margin-top:2vh; max-width:none">순차 공개 · 간판은 릴스 반응 데이터로 발굴 <span class="std">(라이언은 카카오프렌즈 출범 약 3년 뒤 추가된 8번째 캐릭터였다)</span></p>
+    <div class="foot"><b>출처</b> 캐릭터바이블 2장(5인 상세)·확정안 3장, 라이언 발굴 교훈 — 종합리서치보고서 3.1. 모든 제주어 표준어 병기·발행 전 감수. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 8 — 검증된 경로 -->
+  <section class="slide" id="s8">
+    <div class="frame"></div>
+    <div class="kicker">Proven Path · 검증된 경로</div>
+    <h2>망그러진곰이 밟은 길을 <span class="hl">그대로 밟습니다.</span></h2>
+    <p class="lead mt-s">1인 작가 캐릭터가 대형 유통까지 도달한 <b>4단계 경로</b> — 2021~2026년 반복 재현됐고, 실패 비용이 '노동 시간'으로 한정돼 <b>재고 파국이 구조적으로 불가능</b>합니다.</p>
+    <div class="row mt" style="align-items:stretch">
+      <div class="stat"><div style="font-weight:900;color:var(--orange)">STEP 1</div><div class="big" style="font-size:clamp(18px,2.2vw,26px);margin-top:.6vh">SNS 밈화</div><div class="lbl">쇼츠·릴스로 팬덤 깔때기. 시그니처 어미 = 밈 해시태그</div></div>
+      <div class="stat"><div style="font-weight:900;color:var(--orange)">STEP 2</div><div class="big" style="font-size:clamp(18px,2.2vw,26px);margin-top:.6vh">카카오 이모티콘</div><div class="lbl">수익 검증 관문 + 전국 노출. 제안 무료</div></div>
+      <div class="stat"><div style="font-weight:900;color:var(--orange)">STEP 3</div><div class="big" style="font-size:clamp(18px,2.2vw,26px);margin-top:.6vh">굿즈·펀딩</div><div class="lbl">무재고 POD → 텀블벅으로 수요 검증</div></div>
+      <div class="stat"><div style="font-weight:900;color:var(--orange)">STEP 4</div><div class="big" style="font-size:clamp(18px,2.2vw,26px);margin-top:.6vh">콜라보·라이선싱</div><div class="lbl">팬덤을 지렛대로 B2B 확장</div></div>
+    </div>
+    <div class="row mt">
+      <div class="stat"><div class="big">7.3억원</div><div class="lbl">망그러진곰×두산베어스<br>팝업 단일 행사 매출</div></div>
+      <div class="stat"><div class="big">4억원</div><div class="lbl">최고심×스파오<br>출시 당일 매출</div></div>
+      <div class="stat"><div class="big">18.5억원</div><div class="lbl">대전 꿈돌이 라면 1년 미만<br>123만개 (지역 정체성×식품)</div></div>
+    </div>
+    <div class="foot"><b>출처</b> 인디 4단계 경로·망그러진곰 두산 팝업 7억 3,000만원·최고심 스파오 당일 4억원·꿈돌이 라면 123만개·18억 5,100만원 — 종합리서치보고서 3.2·3.4. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 9 — 수익 모델 -->
+  <section class="slide" id="s9">
+    <div class="frame"></div>
+    <div class="kicker">Business Model · 수익 모델</div>
+    <h2><span class="hl">병렬 5채널</span> — 어느 하나에도 종속되지 않는 구조</h2>
+    <p class="lead mt-s" style="max-width:none">기본선(이모티콘+펀딩+POD)은 전부 <b>초기비용 ~0원</b>. "굿즈·매장에 1원도 선투자하지 않는다."</p>
+    <table class="mt">
+      <tr><th>#</th><th>채널</th><th>역할</th><th>12개월 목표 / 검증 수치</th></tr>
+      <tr><td><span class="rank">1</span></td><td><b>카카오 이모티콘</b><br>+ OGQ·모히톡 동시</td><td>IP 검증 + 전국 유통망 노출</td><td>제안 누적 3회+·출시 2종+ · <span class="em">작가 몫 30~35%, OGQ 배분 70%</span> · 승인은 상방 이벤트(승인율 3~5% 추정)</td></tr>
+      <tr><td><span class="rank">2</span></td><td><b>텀블벅 펀딩<br>+ POD</b></td><td>무재고 수요 검증 → 첫 실물 매출</td><td>목표 100~200만원, 달성률 300%+ 노출 · <span class="em">Start 8%, 공개예정 시 달성률 평균 2.5배</span> (문구·굿즈 평균 490만원)</td></tr>
+      <tr><td><span class="rank">3</span></td><td><b>브랜디드</b><br><span class="std">조건부 상방</span></td><td>팔로워 1만 도달 시에만 편입</td><td>건당 <span class="em">7만~170만원</span>(릴스 +20~50%) · 기본 수익선에서 제외</td></tr>
+      <tr><td><span class="rank">4</span></td><td><b>라이선싱</b><br>(쿠마몬식 이원)</td><td>팬덤 확보 후, 문서는 지금 구축</td><td>MG 0원 + 공장도가 <span class="em">3~5%</span> + 1년 + 단일 카테고리 · 인바운드 전용</td></tr>
+      <tr><td><span class="rank">5</span></td><td><b>공공자금</b><br><span class="std">기대값 0</span></td><td>가속 장치 한정</td><td>2027년 정조준 — 예비창업패키지 평균 4,000만원 등</td></tr>
+    </table>
+    <div class="foot"><b>출처</b> 이모티콘 작가 몫 30~35%·OGQ 70%·승인율 3~5% 추정, 텀블벅 Start 8%·공개예정 2.5배·평균 490만원, 브랜디드 7만~170만원, 로열티 3~5% — 종합리서치보고서 5.1·5.2 / 전략서 4장. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 10 — 로드맵 -->
+  <section class="slide" id="s10">
+    <div class="frame"></div>
+    <div class="kicker">Roadmap · 12개월 (2026.7~2027.6)</div>
+    <h2>1년차는 '수익의 해'가 아니라 <span class="hl">'검증의 해'</span></h2>
+    <div class="roadmap mt-s">
+      <div class="q">
+        <div class="qh">Q1</div><div class="qd">2026.7~9</div>
+        <div class="qt">무장과 발사</div>
+        <ul>
+          <li>저작권·상표 선출원 (이름 공개 전)</li>
+          <li>캐릭터 시트 고정 · 감수 계약</li>
+          <li>이모티콘 시안 3세트 → 카카오 1차 제안 + OGQ·모히톡 동시 출시 (W5~6)</li>
+          <li>쇼츠 정규 편성 주 3~4회</li>
+          <li>소유 채널 개설(카톡·이메일)</li>
+        </ul>
+      </div>
+      <div class="q">
+        <div class="qh">Q2</div><div class="qd">2026.10~12</div>
+        <div class="qt">오디션 결산·커머스 준비</div>
+        <ul>
+          <li><b>G1 게이트</b> — 발행 준수율·순증</li>
+          <li>간판 캐릭터 데이터로 확정</li>
+          <li>POD샵 오픈 (반응 상위 밈 컷)</li>
+          <li>텀블벅 공개예정 알림 500명+</li>
+          <li>2주 휴재 1회 (번아웃 방어)</li>
+        </ul>
+      </div>
+      <div class="q">
+        <div class="qh">Q3</div><div class="qd">2027.1~3</div>
+        <div class="qt">첫 커머스·지원사업</div>
+        <ul>
+          <li><b>G2 게이트</b> (1월 초)</li>
+          <li>텀블벅 첫 펀딩 오픈</li>
+          <li>예비창업패키지 지원</li>
+          <li>제30회 관광기념품 공모전 응모</li>
+          <li>카카오 3차 제안</li>
+        </ul>
+      </div>
+      <div class="q">
+        <div class="qh">Q4</div><div class="qd">2027.4~6</div>
+        <div class="qt">최소 오프라인·격상</div>
+        <ul>
+          <li>검증 품목만 제주 소품샵 위탁</li>
+          <li>도내 로컬 F&B 비독점 1건 시도</li>
+          <li>라이선싱 페어 부스 준비</li>
+          <li><b>G3 게이트</b> (6월 말) — 팔로워 1만 여부</li>
+        </ul>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:2vh; max-width:none"><span class="tag o">번아웃 경보</span> &nbsp;주 발행 3회 미만 2주 연속 시 즉시 휴재 → 포맷 A만 유지. <b>공급 중단 = IP 소멸.</b></p>
+    <div class="foot"><b>출처</b> 전략서 5장 12개월 로드맵·게이트 리뷰(G1/G2/G3)·예비창업패키지 평균 4,000만원·경쟁률 49.4:1 — 전략서 5·7장. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 11 — 경쟁 우위 -->
+  <section class="slide" id="s11">
+    <div class="frame"></div>
+    <div class="kicker">Moat · 경쟁 우위</div>
+    <h2>복제하기 어려운 <span class="hl">세 겹의 레이어</span></h2>
+    <div class="adv mt">
+      <div class="advc">
+        <div class="ico" style="background:#fbe0d4">🏛️</div>
+        <h3>감수 체계</h3>
+        <p>제주어연구소 감수 크레딧을 세계관에 내장(낭할망). 표기 오류('좋쑤콰') 논란을 최소비용으로 차단하고, 카카오 심사 창의성 항목의 무기로 전환. 수익 5% 보존 활동 환원 공표.</p>
+      </div>
+      <div class="advc">
+        <div class="ico" style="background:#d7e2f5">🤖</div>
+        <h3>AI 파이프라인</h3>
+        <p>월 <b>$30~50</b>로 기획→이미지→애니→음성→편집 전 공정 커버. 카드뉴스 원고 재활용 발음 쇼츠 = 자동화 최적 포맷. 1소재 2채널 출력. 제주어는 실녹음, TTS는 표준어 한정.</p>
+      </div>
+      <div class="advc">
+        <div class="ico" style="background:#d3ead9">🌬️</div>
+        <h3>경량 모델</h3>
+        <p>재고·매장·광고 대량집행 <b>0원</b>. 손실 상한 = 예산 500만원 + 노동 시간. 서울 해치(231종 전량 재고)·라인프렌즈 직영 축소가 준 교훈 — 대기업조차 버린 무거운 모델을 처음부터 안 탄다.</p>
+      </div>
+    </div>
+    <p class="lead mt" style="max-width:none">그리고 무엇보다 — <b>지속성이 곧 해자(垓子)</b>입니다. 개인 소유 IP의 상시 운영은, 단체장 교체로 4년 만에 소멸한 공공 캐릭터가 흉내 낼 수 없는 우위입니다.</p>
+    <div class="foot"><b>출처</b> 감수 체계·표기 오류 선례, AI 월 $30~50 파이프라인, 서울 해치 231종 전량 재고·지속성 해자 — 종합리서치보고서 3.5·4·7·8장. 제주어 감수: 제주어연구소 감수 예정.</div>
+  </section>
+
+  <!-- SLIDE 12 — 비전 + 연락처 -->
+  <section class="slide" id="s12" style="align-items:center; justify-content:center; text-align:center; background:linear-gradient(160deg,#F5EDDF 0%, #f7e6cf 100%);">
+    <div class="frame"></div>
+    <svg viewBox="0 0 120 70" width="min(18vw,150px)" style="margin-bottom:2vh" aria-label="6잎 꽃">
+      <g transform="translate(60,38)"><g fill="#FFCC5C" stroke="#3E3226" stroke-width="2">
+        <ellipse cx="0" cy="-15" rx="7" ry="12"/><ellipse cx="0" cy="-15" rx="7" ry="12" transform="rotate(60)"/><ellipse cx="0" cy="-15" rx="7" ry="12" transform="rotate(120)"/><ellipse cx="0" cy="-15" rx="7" ry="12" transform="rotate(180)"/><ellipse cx="0" cy="-15" rx="7" ry="12" transform="rotate(240)"/><ellipse cx="0" cy="-15" rx="7" ry="12" transform="rotate(300)"/>
+      </g><circle r="7" fill="#E8622D" stroke="#3E3226" stroke-width="2"/></g>
+    </svg>
+    <div class="kicker">The Vision · 비전</div>
+    <h1 style="max-width:22ch">사라져가는 제주어를,<br><span style="color:var(--orange)">매일 쓰는 말로.</span></h1>
+    <p class="lead" style="margin-top:2.4vh; text-align:center; max-width:44ch">유네스코 소멸위기 언어인 제주어를 박물관이 아니라 <b>카카오톡과 쇼츠 피드 안에서</b> 살아 움직이게. 골든카무이가 아이누어에 한 일을, 1인 크리에이터의 지속 가능한 규모로 상시화합니다.</p>
+    <div style="margin-top:3vh; font-size:clamp(20px,2.6vw,32px); font-weight:900; color:var(--orange)">"제주어, 같이 지켜요."</div>
+    <div style="margin-top:2.4vh; display:flex; gap:1vw; flex-wrap:wrap; justify-content:center">
+      <span class="tag o">@tamnaground</span>
+      <span class="tag">탐라그라운드</span>
+      <span class="tag b">탐탐이와 친구들</span>
+    </div>
+    <div style="margin-top:3vh; font-size:clamp(11px,1.2vw,15px); color:#7a6c56; line-height:1.6">
+      제주어 감수: 제주어연구소 감수 예정 · 수익의 5%는 제주어 보존 활동에 쓰입니다<br>ⓒ 탐탐이와 친구들
+    </div>
+  </section>
+
+</div>
+
+<div id="nav">
+  <button class="navbtn" id="prev" aria-label="이전">‹</button>
+  <span id="counter">1 / 12</span>
+  <button class="navbtn" id="next" aria-label="다음">›</button>
+</div>
+<div class="hint">← → 방향키 · 클릭으로 이동</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let i = 0;
+  const counter = document.getElementById('counter');
+  const prog = document.getElementById('progress');
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+    counter.textContent = (i+1)+' / '+slides.length;
+    prog.style.width = ((i+1)/slides.length*100)+'%';
+  }
+  document.getElementById('next').onclick = ()=>show(i+1);
+  document.getElementById('prev').onclick = ()=>show(i-1);
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') { show(i+1); e.preventDefault(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp') { show(i-1); e.preventDefault(); }
+    else if(e.key==='Home') show(0);
+    else if(e.key==='End') show(slides.length-1);
+  });
+  document.getElementById('stage').addEventListener('click', e=>{
+    if(e.target.closest('#nav')) return;
+    const x = e.clientX / window.innerWidth;
+    if(x > 0.5) show(i+1); else show(i-1);
+  });
+  show(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- 몽생이 — 제주마 망아지. 통통 4족, 머리:몸=1:1, 구름 갈기 + 물결 꼬리 -->
+
+  <!-- 물결 꼬리 (주황) -->
+  <path d="M300 250 q40 -10 40 22 q22 -6 16 26 q26 4 6 30"
+        fill="#E8622D" stroke="#3E3226" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- 다리 4개 (짧은 원기둥) -->
+  <g fill="#FFCC5C" stroke="#3E3226" stroke-width="6" stroke-linejoin="round">
+    <rect x="150" y="298" width="26" height="52" rx="12"/>
+    <rect x="196" y="300" width="26" height="52" rx="12"/>
+    <rect x="238" y="298" width="26" height="52" rx="12"/>
+    <rect x="284" y="300" width="26" height="52" rx="12"/>
+  </g>
+
+  <!-- 몸통 -->
+  <ellipse cx="228" cy="272" rx="98" ry="62" fill="#FFCC5C" stroke="#3E3226" stroke-width="6"/>
+  <!-- 배 (크림) -->
+  <ellipse cx="228" cy="292" rx="70" ry="34" fill="#F5EDDF"/>
+
+  <!-- 등 배달 가방 (초록, 병 꽂힘) -->
+  <g transform="translate(250 214)">
+    <rect x="-24" y="0" width="48" height="34" rx="8" fill="#BCD9A0" stroke="#3E3226" stroke-width="5"/>
+    <path d="M-24 12 h48" stroke="#3E3226" stroke-width="4"/>
+    <rect x="-6" y="-24" width="16" height="26" rx="5" fill="#FFFDF7" stroke="#3E3226" stroke-width="4"/>
+    <rect x="-6" y="-30" width="16" height="9" rx="2.5" fill="#F7C873" stroke="#3E3226" stroke-width="3.5"/>
+    <circle cx="2" cy="-10" r="2.6" fill="#FFCC5C"/>
+  </g>
+
+  <!-- 귀 2개 (쫑긋) -->
+  <path d="M108 168 l-16 -46 l34 20 Z" fill="#FFCC5C" stroke="#3E3226" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M158 156 l6 -48 l28 34 Z" fill="#FFCC5C" stroke="#3E3226" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- 머리 (둥근, 낮은 주둥이) -->
+  <circle cx="140" cy="212" r="72" fill="#FFCC5C" stroke="#3E3226" stroke-width="6"/>
+  <!-- 주둥이 (크림) -->
+  <ellipse cx="108" cy="240" rx="42" ry="34" fill="#F5EDDF" stroke="#3E3226" stroke-width="5"/>
+  <circle cx="92" cy="238" r="4" fill="#3E3226"/>
+  <circle cx="110" cy="244" r="4" fill="#3E3226"/>
+
+  <!-- 구름 갈기 (이마~목, 3덩이 주황) -->
+  <g fill="#E8622D" stroke="#3E3226" stroke-width="6" stroke-linejoin="round">
+    <circle cx="150" cy="150" r="24"/>
+    <circle cx="182" cy="176" r="26"/>
+    <circle cx="196" cy="214" r="24"/>
+  </g>
+
+  <!-- 눈 + 볼 -->
+  <circle cx="150" cy="205" r="8" fill="#3E3226"/>
+  <ellipse cx="168" cy="228" rx="15" ry="10" fill="#E8622D" opacity="0.85"/>
+  <path d="M138 224 q10 6 20 0" fill="none" stroke="#3E3226" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- 당근 (입 근처) -->
+  <g transform="translate(70 262) rotate(20)">
+    <path d="M0 0 l24 -6 l-14 30 Z" fill="#E8622D" stroke="#3E3226" stroke-width="4.5" stroke-linejoin="round"/>
+    <path d="M22 -6 l6 -14 M26 -4 l12 -8 M25 0 l16 -2" stroke="#2F7A3D" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

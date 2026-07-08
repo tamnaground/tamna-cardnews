@@ -1,0 +1,35 @@
+@font-face{
+  font-family:'NotoKR';
+  src:url('file:///tmp/claude-0/-home-user-tamna-cardnews/0fa13144-17bd-5a1c-be9f-d686235e9287/scratchpad/NotoSansKR.ttf');
+  font-weight:100 900;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#F5EDDF; --orange:#E8622D; --yellow:#FFCC5C; --yellow2:#F7C873;
+  --green:#2F7A3D; --green2:#BCD9A0; --blue:#1D5BB8; --blue2:#2563AC;
+  --pink:#F2A9C4; --ink:#3E3226;
+}
+html,body{width:1080px;height:1350px;font-family:'NotoKR',sans-serif;color:var(--ink);}
+.card{position:relative;width:1080px;height:1350px;background:var(--cream);overflow:hidden;}
+/* 상단 주황 타이틀 바 */
+.top{height:150px;background:var(--orange);display:flex;align-items:center;justify-content:center;position:relative;}
+.top h1{color:#fff;font-weight:800;font-size:58px;letter-spacing:-1px;text-align:center;}
+.top .sub{position:absolute;right:36px;bottom:14px;color:#ffe4d3;font-size:22px;font-weight:600;}
+/* 본문 */
+.body{position:relative;height:1034px;padding:44px;}
+.frame{position:absolute;inset:26px;border:4px dashed var(--ink);border-radius:28px;pointer-events:none;}
+.inner{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 46px;}
+/* 크레딧 스트립 */
+.credit{height:46px;background:var(--cream);display:flex;align-items:center;justify-content:center;
+  font-size:16.5px;color:var(--ink);opacity:.82;font-weight:500;border-top:2px dotted rgba(62,50,38,.3);}
+/* 하단 초록 바 */
+.bottom{height:120px;background:var(--green);display:flex;align-items:center;justify-content:center;}
+.bottom span{color:#fff;font-weight:800;font-size:46px;letter-spacing:1px;}
+/* 모서리 6잎 꽃 장식 */
+.corner{position:absolute;width:96px;height:96px;opacity:.5;}
+.corner.tl{top:20px;left:20px;} .corner.tr{top:20px;right:20px;}
+.corner.bl{bottom:20px;left:20px;} .corner.br{bottom:20px;right:20px;}
+/* 공통 텍스트 */
+.jeju{font-weight:800;color:var(--ink);line-height:1.05;}
+.std{color:var(--orange);font-weight:700;}
+.gloss{color:#8a7a63;font-weight:600;}

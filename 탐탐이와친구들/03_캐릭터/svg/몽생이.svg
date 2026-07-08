@@ -22,7 +22,7 @@
   <g transform="translate(250 214)">
     <rect x="-24" y="0" width="48" height="34" rx="8" fill="#BCD9A0" stroke="#3E3226" stroke-width="5"/>
     <path d="M-24 12 h48" stroke="#3E3226" stroke-width="4"/>
-    <rect x="-6" y="-24" width="16" height="26" rx="5" fill="#FFFDF7" stroke="#3E3226" stroke-width="4"/>
+    <rect x="-6" y="-24" width="16" height="26" rx="5" fill="#F5EDDF" stroke="#3E3226" stroke-width="4"/>
     <rect x="-6" y="-30" width="16" height="9" rx="2.5" fill="#F7C873" stroke="#3E3226" stroke-width="3.5"/>
     <circle cx="2" cy="-10" r="2.6" fill="#FFCC5C"/>
   </g>

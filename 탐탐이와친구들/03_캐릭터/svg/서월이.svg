@@ -30,7 +30,7 @@
   <path d="M288 214 q40 20 30 74 q-28 -12 -44 -30 Z" fill="#2563AC" stroke="#3E3226" stroke-width="5" stroke-linejoin="round"/>
 
   <!-- 큰 동그란 안경 (얼굴 폭 55~60%) -->
-  <g stroke="#3E3226" stroke-width="6" fill="#FFFDF7">
+  <g stroke="#3E3226" stroke-width="6" fill="#F5EDDF">
     <circle cx="166" cy="212" r="42"/>
     <circle cx="234" cy="212" r="42"/>
   </g>
@@ -48,7 +48,7 @@
   <!-- 스프링 단어장 + 연필 (분홍 표지) -->
   <g transform="translate(300 300) rotate(12)">
     <rect x="-30" y="-24" width="52" height="60" rx="5" fill="#F2A9C4" stroke="#3E3226" stroke-width="5"/>
-    <rect x="-22" y="-16" width="36" height="44" rx="3" fill="#FFFDF7" stroke="#3E3226" stroke-width="3.5"/>
+    <rect x="-22" y="-16" width="36" height="44" rx="3" fill="#F5EDDF" stroke="#3E3226" stroke-width="3.5"/>
     <path d="M-18 -6 h28 M-18 4 h28 M-18 14 h20" stroke="#3E3226" stroke-width="3" stroke-linecap="round"/>
     <g stroke="#3E3226" stroke-width="3">
       <path d="M-30 -18 l-8 0 M-30 -8 l-8 0 M-30 2 l-8 0 M-30 12 l-8 0 M-30 22 l-8 0"/>

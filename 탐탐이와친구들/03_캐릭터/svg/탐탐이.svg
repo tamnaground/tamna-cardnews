@@ -49,7 +49,7 @@
   <g transform="translate(200 322)">
     <rect x="-9" y="-40" width="18" height="12" rx="3" fill="#F7C873" stroke="#3E3226" stroke-width="4"/>
     <path d="M-16 -28 h32 a6 6 0 0 1 6 6 v22 a10 10 0 0 1 -10 10 h-24 a10 10 0 0 1 -10 -10 v-22 a6 6 0 0 1 6 -6 Z"
-          fill="#FFFDF7" stroke="#3E3226" stroke-width="4"/>
+          fill="#F5EDDF" stroke="#3E3226" stroke-width="4"/>
     <circle cx="-4" cy="-6" r="3.2" fill="#FFCC5C"/>
     <circle cx="7" cy="2" r="2.6" fill="#FFCC5C"/>
     <circle cx="-8" cy="6" r="2.2" fill="#FFCC5C"/>

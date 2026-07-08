@@ -1,6 +1,6 @@
 @font-face{
   font-family:'NotoKR';
-  src:url('file:///tmp/claude-0/-home-user-tamna-cardnews/0fa13144-17bd-5a1c-be9f-d686235e9287/scratchpad/NotoSansKR.ttf');
+  src:url('NotoSansKR.ttf');
   font-weight:100 900;
 }
 *{margin:0;padding:0;box-sizing:border-box;}

@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# ~/.local/bin/fable — Fable 오케스트레이션 스위치 (런처가 아니라 토글)
+#
+# 본체는 ~/.claude/fable/ 한 곳에만 있고, 각 설정 파일에는 얇은 로딩 코드만 있다:
+#   1. ~/.claude/CLAUDE.md 끝의 @active.md 한 줄          (선언)
+#   2. ~/.claude/agents/ 의 deep-reasoner/runner 심링크    (역할 배정)
+#   3. ~/.bashrc 의 source ~/.claude/fable/env.sh 한 줄    (sonnet->Opus 리매핑)
+#   4. ~/.claude/settings.json 의 PreToolUse 게이트 훅      (강제 장치)
+#
+# 토글은 설정 파일을 건드리지 않는다:
+#   fable on      .fable-state=on,  active.md -> fable.md  (지침 로드)
+#   fable off     .fable-state=off, active.md -> empty.md  (지침 없음)
+#   fable status  상태와 로딩 코드 설치 여부 점검
+#
+# 적용 시점: 다음에 새로 시작하는 claude 세션부터 (떠 있는 세션은 영향 없음).
+set -u
+FABLE_DIR="$HOME/.claude/fable"
+STATE="$HOME/.claude/.fable-state"
+case "${1:-status}" in
+  on)
+    echo on > "$STATE"
+    ln -sfn "$FABLE_DIR/fable.md" "$FABLE_DIR/active.md"
+    echo "Fable 오케스트레이션 ON — 다음 claude 세션부터 적용됩니다."
+    ;;
+  off)
+    echo off > "$STATE"
+    ln -sfn "$FABLE_DIR/empty.md" "$FABLE_DIR/active.md"
+    echo "Fable 오케스트레이션 OFF — 다음 claude 세션부터 일반 모드입니다."
+    ;;
+  status)
+    s=$(cat "$STATE" 2>/dev/null || echo off)
+    echo "Fable 오케스트레이션: ${s^^}"
+    echo "  active.md -> $(readlink "$FABLE_DIR/active.md" 2>/dev/null || echo '(없음)')"
+    grep -q 'fable/active.md' "$HOME/.claude/CLAUDE.md" 2>/dev/null && ok='[OK]' || ok='[--]'
+    echo "  $ok @import   ~/.claude/CLAUDE.md"
+    grep -q 'fable/env.sh' "$HOME/.bashrc" 2>/dev/null && ok='[OK]' || ok='[--]'
+    echo "  $ok env 래퍼  ~/.bashrc"
+    [ -L "$HOME/.claude/agents/deep-reasoner.md" ] && [ -L "$HOME/.claude/agents/runner.md" ] && ok='[OK]' || ok='[--]'
+    echo "  $ok agents    ~/.claude/agents"
+    grep -q 'orchestration-gate' "$HOME/.claude/settings.json" 2>/dev/null && ok='[OK]' || ok='[--]'
+    echo "  $ok 게이트 훅 ~/.claude/settings.json"
+    [ -x "$FABLE_DIR/hooks/orchestration-gate.py" ] && ok='[OK]' || ok='[--]'
+    echo "  $ok 게이트 스크립트 $FABLE_DIR/hooks/orchestration-gate.py"
+    ;;
+  *)
+    echo "사용법: fable on | off | status" >&2
+    exit 1
+    ;;
+esac

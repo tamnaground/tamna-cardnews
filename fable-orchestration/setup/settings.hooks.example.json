@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit|MultiEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/사용자명/.claude/fable/hooks/orchestration-gate.py"
+          }
+        ]
+      }
+    ]
+  }
+}

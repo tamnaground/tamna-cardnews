@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fable 5 오케스트레이션 가이드 — 지휘는 Fable, 실행은 Opus, 잡무는 Haiku</title>
+<style>
+:root{
+  --bg:#f6f5f2; --surface:#ffffff; --ink:#1f2430; --muted:#5c6472; --line:#dcdde3;
+  --accent:#2e5aac; --accent-ink:#24478a; --accent-soft:#e8eef9;
+  --gate:#b7791f; --gate-soft:#f7efdd; --ok:#2f855a; --ok-soft:#e3f1e9;
+  --code-bg:#f0f1f4; --term-bg:#1b1f27; --term-ink:#d6dae3; --term-dim:#7c8494;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14171c; --surface:#1c2027; --ink:#e3e6ec; --muted:#98a0ae; --line:#31363f;
+    --accent:#8fb0ee; --accent-ink:#adc5f4; --accent-soft:#232c3d;
+    --gate:#d9a23f; --gate-soft:#2e2718; --ok:#6bbd92; --ok-soft:#1c2b23;
+    --code-bg:#22262e; --term-bg:#101318; --term-ink:#d6dae3; --term-dim:#7c8494;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171c; --surface:#1c2027; --ink:#e3e6ec; --muted:#98a0ae; --line:#31363f;
+  --accent:#8fb0ee; --accent-ink:#adc5f4; --accent-soft:#232c3d;
+  --gate:#d9a23f; --gate-soft:#2e2718; --ok:#6bbd92; --ok-soft:#1c2b23;
+  --code-bg:#22262e; --term-bg:#101318; --term-ink:#d6dae3; --term-dim:#7c8494;
+}
+:root[data-theme="light"]{
+  --bg:#f6f5f2; --surface:#ffffff; --ink:#1f2430; --muted:#5c6472; --line:#dcdde3;
+  --accent:#2e5aac; --accent-ink:#24478a; --accent-soft:#e8eef9;
+  --gate:#b7791f; --gate-soft:#f7efdd; --ok:#2f855a; --ok-soft:#e3f1e9;
+  --code-bg:#f0f1f4; --term-bg:#1b1f27; --term-ink:#d6dae3; --term-dim:#7c8494;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  font-size:16.5px; line-height:1.74; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:768px; margin:0 auto; padding:0 22px 96px}
+a{color:var(--accent-ink)}
+h1,h2,h3{line-height:1.32; text-wrap:balance}
+h1{font-size:1.95rem; font-weight:800; letter-spacing:-.015em; margin:.5rem 0 1rem}
+h2{font-size:1.4rem; font-weight:750; letter-spacing:-.01em; margin:0 0 .9rem}
+h3{font-size:1.08rem; font-weight:700; margin:2.1rem 0 .7rem}
+p{margin:0 0 1.05rem}
+strong{font-weight:700}
+section{margin-top:4.2rem}
+.eyebrow{
+  font-size:.72rem; font-weight:700; letter-spacing:.14em; color:var(--accent);
+  text-transform:uppercase; margin:0 0 .55rem; display:flex; align-items:center; gap:.6rem;
+}
+.eyebrow::after{content:""; height:1px; flex:1; background:var(--line)}
+.eyebrow.gate{color:var(--gate)}
+.eyebrow.ok{color:var(--ok)}
+header.hero{padding-top:4.2rem}
+.kicker{font-size:.78rem; font-weight:700; letter-spacing:.16em; color:var(--accent); margin-bottom:.9rem}
+.lede{font-size:1.06rem; color:var(--muted); max-width:60ch}
+/* 계층 스택 다이어그램 */
+.stack{display:flex; flex-direction:column; gap:7px; margin:2.2rem 0 .4rem}
+.layer{
+  display:flex; align-items:baseline; gap:.9rem; padding:.72rem 1.05rem;
+  background:var(--surface); border:1px solid var(--line); border-radius:8px;
+  border-left:4px solid var(--accent);
+}
+.layer .no{font-size:.72rem; font-weight:800; letter-spacing:.1em; color:var(--accent); min-width:1.4rem}
+.layer .nm{font-weight:700; min-width:6.2rem}
+.layer .fl{font-family:ui-monospace,Consolas,monospace; font-size:.78rem; color:var(--muted); overflow-wrap:anywhere}
+.layer.gate{border-left-color:var(--gate); background:var(--gate-soft)}
+.layer.gate .no{color:var(--gate)}
+.stack-cap{font-size:.8rem; color:var(--muted); margin-bottom:0}
+/* 얻는 것 카드 */
+.gains{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:1.4rem 0 0}
+@media (max-width:620px){.gains{grid-template-columns:1fr}}
+.gain{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:1rem 1.1rem}
+.gain .n{font-size:.72rem; font-weight:800; letter-spacing:.08em; color:var(--accent)}
+.gain h4{margin:.3rem 0 .35rem; font-size:.95rem; line-height:1.45}
+.gain p{margin:0; font-size:.85rem; color:var(--muted); line-height:1.6}
+/* 표 */
+.tblwrap{overflow-x:auto; margin:1.2rem 0; border:1px solid var(--line); border-radius:10px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:.88rem; line-height:1.6}
+th{
+  text-align:left; font-size:.72rem; letter-spacing:.08em; color:var(--muted);
+  font-weight:700; padding:.6rem .95rem; border-bottom:1px solid var(--line); white-space:nowrap;
+}
+td{padding:.6rem .95rem; border-bottom:1px solid var(--line); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td code, p code, li code{
+  font-family:ui-monospace,Consolas,monospace; font-size:.85em;
+  background:var(--code-bg); padding:.08em .4em; border-radius:4px; overflow-wrap:anywhere;
+}
+/* 코드 블록 */
+figure.code{margin:1.3rem 0; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--surface)}
+figure.code figcaption{
+  display:flex; justify-content:space-between; align-items:center; gap:1rem;
+  padding:.5rem .95rem; border-bottom:1px solid var(--line);
+  font-family:ui-monospace,Consolas,monospace; font-size:.76rem; color:var(--muted);
+  background:var(--code-bg);
+}
+figure.code pre{margin:0; padding:.95rem 1.05rem; overflow-x:auto; background:var(--surface)}
+figure.code pre code{font-family:ui-monospace,Consolas,monospace; font-size:.8rem; line-height:1.62; background:none; padding:0}
+button.copy{
+  font:inherit; font-size:.72rem; color:var(--accent-ink); background:none;
+  border:1px solid var(--line); border-radius:6px; padding:.12rem .6rem; cursor:pointer; white-space:nowrap;
+}
+button.copy:hover{background:var(--accent-soft)}
+button.copy:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+details.full{margin:1.3rem 0}
+details.full>summary{
+  cursor:pointer; font-size:.85rem; font-weight:700; color:var(--accent-ink);
+  padding:.55rem .9rem; border:1px solid var(--line); border-radius:10px; background:var(--surface);
+  list-style:none; display:flex; align-items:center; gap:.5rem;
+}
+details.full>summary::before{content:"▸"; transition:transform .15s}
+details.full[open]>summary::before{transform:rotate(90deg)}
+details.full>summary::-webkit-details-marker{display:none}
+details.full[open]>summary{border-radius:10px 10px 0 0; border-bottom:none}
+details.full[open] figure.code{margin:0; border-radius:0 0 10px 10px}
+@media (prefers-reduced-motion:reduce){details.full>summary::before{transition:none}}
+/* 터미널 */
+.term{background:var(--term-bg); border-radius:10px; margin:1.3rem 0; overflow:hidden}
+.term .bar{display:flex; gap:5px; padding:.6rem .9rem 0}
+.term .bar i{width:9px; height:9px; border-radius:50%; background:#3a4150}
+.term pre{margin:0; padding:.7rem 1.05rem 1rem; overflow-x:auto}
+.term code{font-family:ui-monospace,Consolas,monospace; font-size:.8rem; line-height:1.7; color:var(--term-ink)}
+.term .c{color:var(--term-dim)}
+.term .o{color:#9ec49a}
+.term .b{color:#e0a95e}
+/* 파일 트리 */
+.tree{font-family:ui-monospace,Consolas,monospace; font-size:.8rem; line-height:1.75}
+.tree .cm{color:var(--muted)}
+/* 콜아웃 */
+.callout{display:flex; gap:.8rem; padding:1rem 1.1rem; border-radius:10px; margin:1.4rem 0; font-size:.9rem; line-height:1.68}
+.callout .ic{flex:none; font-weight:800}
+.callout.info{background:var(--accent-soft); color:var(--ink)}
+.callout.info .ic{color:var(--accent)}
+.callout.warn{background:var(--gate-soft)}
+.callout.warn .ic{color:var(--gate)}
+.callout p{margin:0}
+.callout .t{font-weight:700; display:block; margin-bottom:.2rem}
+/* 체크리스트 */
+ul.check{list-style:none; padding:0; margin:1.1rem 0; display:flex; flex-direction:column; gap:8px}
+ul.check li{
+  display:flex; gap:.7rem; align-items:baseline; background:var(--surface);
+  border:1px solid var(--line); border-radius:8px; padding:.6rem .95rem; font-size:.9rem;
+}
+ul.check li::before{content:"✓"; color:var(--ok); font-weight:800}
+/* 비포/애프터 */
+.duo{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:1.4rem 0}
+@media (max-width:620px){.duo{grid-template-columns:1fr}}
+.duo .p{border:1px solid var(--line); border-radius:10px; padding:1rem 1.1rem; background:var(--surface); font-size:.87rem; line-height:1.66}
+.duo .p .tag{font-size:.72rem; font-weight:800; letter-spacing:.08em; display:block; margin-bottom:.45rem}
+.duo .p.before .tag{color:var(--gate)}
+.duo .p.after{border-color:var(--ok); background:var(--ok-soft)}
+.duo .p.after .tag{color:var(--ok)}
+.duo .p p{margin:0; color:inherit}
+/* 목록 */
+ul.notes{padding-left:1.1rem; margin:1rem 0; display:flex; flex-direction:column; gap:.55rem}
+ul.notes li{padding-left:.2rem}
+.rules{padding-left:1.1rem; margin:1rem 0; display:flex; flex-direction:column; gap:.45rem}
+footer{margin-top:5rem; padding-top:1.4rem; border-top:1px solid var(--line); font-size:.8rem; color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">CLAUDE CODE · 모델 오케스트레이션</div>
+  <h1>Fable 5는 지휘만, 손발은 하위 모델로<br>— 권고가 아니라 물리 차단으로</h1>
+  <p class="lede">Claude Fable 5는 현재 가장 똑똑한 모델이면서 가장 비싼 모델입니다. 입력 100만 토큰당 10달러, 출력 100만 토큰당 50달러로 Opus 4.8의 두 배입니다. 그래서 Fable 5에게 보일러플레이트 작성, 테스트 실행, 파일 검색 같은 실행 작업을 시키면 비싼 토큰이 싼 일에 녹아 없어집니다.</p>
+  <div class="stack" role="img" aria-label="4계층 구조: 선언, 역할 배정, 모델 리매핑, 강제 게이트">
+    <div class="layer"><span class="no">L1</span><span class="nm">선언</span><span class="fl">~/.claude/fable/fable.md — 오케스트레이션 지침</span></div>
+    <div class="layer"><span class="no">L2</span><span class="nm">역할 배정</span><span class="fl">agents/ — deep-reasoner(Opus)·runner(Haiku)</span></div>
+    <div class="layer"><span class="no">L3</span><span class="nm">모델 리매핑</span><span class="fl">env.sh — sonnet 지정 에이전트를 Opus 4.8로 승격</span></div>
+    <div class="layer gate"><span class="no">L4</span><span class="nm">강제 게이트</span><span class="fl">hooks/orchestration-gate.py — 직접 코드 수정을 턴당 2개 파일로 차단</span></div>
+  </div>
+  <p class="stack-cap">위 세 계층은 권고, 마지막 계층만 물리 차단 — 이 가이드의 핵심은 L4입니다.</p>
+</header>
+
+<section>
+  <p>해결 방향은 명확합니다. Fable 5는 계획, 작업 분배, 중요한 결정, 결과 종합 같은 판단만 맡고, 실제 손발은 하위 모델이 움직이면 됩니다. 무거운 추론은 Opus 4.8이 최대 추론 예산으로 처리하고, 명령 실행이나 로그 확인 같은 잡무는 Haiku 4.5가 처리하는 구조입니다.</p>
+  <p>그런데 대부분의 셋업이 여기서 한 가지를 놓칩니다. CLAUDE.md에 "Fable은 지휘만 하고 구현은 위임한다"라고 적는 것만으로는 부족합니다. 이 지침은 어디까지나 권고라서, 모델이 마음만 먹으면 직접 코드를 고칠 수 있기 때문입니다. 토큰을 실제로 아끼려면 말로 설득하는 단계를 넘어 물리적으로 막아야 합니다.</p>
+  <p>이 가이드는 그 전체 구조를 다룹니다. 지침 선언, 서브에이전트 역할 배정, 모델 리매핑, 그리고 훅 기반 강제 게이트까지 4계층을 쌓고, 마지막에 이 모든 것을 명령 하나로 켜고 끄는 스위치로 묶습니다. 실제 환경에서 차단이 작동하는지 검증한 결과도 함께 싣습니다.</p>
+
+  <h3>이 가이드에서 얻는 것</h3>
+  <div class="gains">
+    <div class="gain"><span class="n">1</span><h4>Fable 5 지휘 + Opus 4.8 실행 + Haiku 4.5 잡무의 3단 역할 분리</h4><p>비싼 모델이 싼 일을 하지 않게 만드는 기본 구도</p></div>
+    <div class="gain"><span class="n">2</span><h4>CLAUDE.md 권고를 물리 차단으로 바꾸는 PreToolUse 강제 게이트</h4><p>메인 에이전트의 직접 코드 수정을 턴당 2개 파일로 제한</p></div>
+    <div class="gain"><span class="n">3</span><h4>서브에이전트는 차단하지 않는 안전한 게이트 설계</h4><p>훅 페이로드의 agent_id 필드로 메인과 서브를 구분</p></div>
+    <div class="gain"><span class="n">4</span><h4>fable on/off 명령 하나로 전체 설정을 켜고 끄는 스위치 구조</h4><p>설정 본체는 한 폴더, 각 설정 파일에는 얇은 로딩 코드만</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">구조</p>
+  <h2>전체 구조 훑어보기</h2>
+  <p>본격적인 설치에 들어가기 전에 구조부터 잡겠습니다. 각 계층이 무엇을 담당하는지 알아야 문제가 생겼을 때 어디를 봐야 하는지 판단할 수 있기 때문입니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>계층</th><th>파일</th><th>역할</th></tr></thead>
+    <tbody>
+      <tr><td>선언</td><td><code>~/.claude/fable/fable.md</code></td><td>오케스트레이션 지침. CLAUDE.md가 임포트해서 세션에 로드</td></tr>
+      <tr><td>역할 배정</td><td><code>~/.claude/fable/agents/</code></td><td>deep-reasoner(Opus 4.8, 심층 추론)와 runner(Haiku 4.5, 잡무) 정의</td></tr>
+      <tr><td>모델 리매핑</td><td><code>~/.claude/fable/env.sh</code></td><td>Sonnet으로 지정된 서브에이전트를 Opus 4.8로 승격하는 환경변수 주입</td></tr>
+      <tr><td>강제 장치</td><td><code>~/.claude/fable/hooks/orchestration-gate.py</code></td><td>메인 에이전트의 직접 코드 수정을 물리적으로 제한하는 PreToolUse 훅</td></tr>
+    </tbody>
+  </table></div>
+  <p>이 구조의 핵심 설계 원칙은 <strong>설정 본체와 로딩 코드의 분리</strong>입니다. 실제 내용은 전부 <code>~/.claude/fable/</code> 한 폴더에만 있고, Claude Code가 읽는 설정 파일에는 그 폴더를 가리키는 얇은 로딩 코드 한 줄씩만 들어갑니다. 켜고 끌 때는 설정 파일을 전혀 건드리지 않고 폴더 안의 심링크 하나만 바꿉니다. 덕분에 나중에 완전히 제거하고 싶어도 로딩 코드 몇 줄만 지우면 끝납니다.</p>
+
+  <h3>설정 본체 구조</h3>
+  <figure class="code"><figcaption><span>~/.claude/fable</span></figcaption>
+<pre class="tree"><code>~/.claude/fable
+├── fable.md              <span class="cm"># 오케스트레이션 지침 (on일 때 로드)</span>
+├── empty.md              <span class="cm"># 빈 파일 (off일 때 로드)</span>
+├── active.md             <span class="cm"># 심링크: fable.md &lt;-&gt; empty.md 를 오감</span>
+├── env.sh                <span class="cm"># claude 래퍼 함수 + Sonnet-&gt;Opus 리매핑</span>
+├── agents
+│   ├── deep-reasoner.md  <span class="cm"># Opus 4.8, 추론 예산 최대</span>
+│   └── runner.md         <span class="cm"># Haiku 4.5, 잡무 전담</span>
+├── hooks
+│   └── orchestration-gate.py  <span class="cm"># PreToolUse 강제 게이트</span>
+└── state/                <span class="cm"># 게이트가 쓰는 턴별 카운터 (자동 생성)</span></code></pre>
+  </figure>
+  <p>로딩 코드는 네 군데에 한 번씩만 설치합니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>위치</th><th>로딩 코드</th><th>담당 계층</th></tr></thead>
+    <tbody>
+      <tr><td><code>~/.claude/CLAUDE.md</code> 끝</td><td><code>@/home/사용자명/.claude/fable/active.md</code> 한 줄</td><td>선언</td></tr>
+      <tr><td><code>~/.claude/agents/</code></td><td>에이전트 파일 심링크 2개</td><td>역할 배정</td></tr>
+      <tr><td><code>~/.bashrc</code></td><td><code>source ~/.claude/fable/env.sh</code> 한 줄</td><td>모델 리매핑</td></tr>
+      <tr><td><code>~/.claude/settings.json</code></td><td>PreToolUse 훅 등록 블록</td><td>강제 장치</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <p class="eyebrow">준비</p>
+  <h2>시작 전 준비</h2>
+  <p>아래 조건만 갖추면 이 가이드를 그대로 따라갈 수 있습니다. 전체 과정은 WSL 터미널 기준입니다.</p>
+  <ul class="check">
+    <li>Windows + WSL 환경에 Claude Code 최신 버전 설치</li>
+    <li>Fable 5를 쓸 수 있는 구독 플랜 (Pro, Max, Team, Enterprise)</li>
+    <li>WSL에 python3 설치 (게이트 훅 스크립트 실행용)</li>
+    <li><code>~/.local/bin</code>이 PATH에 포함되어 있는지 확인</li>
+  </ul>
+  <p>준비 확인은 터미널에서 바로 할 수 있습니다.</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div>
+<pre><code><span class="c">$</span> claude --version
+<span class="c">$</span> python3 --version
+<span class="o">Python 3.12.3</span>
+<span class="c">$</span> echo $PATH | grep -o '.local/bin'
+<span class="o">.local/bin</span></code></pre>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">1단계</p>
+  <h2>오케스트레이션 지침과 스위치</h2>
+  <p>첫 단계에서는 Fable 5에게 줄 지휘 지침을 파일로 만들고, 그 지침을 켜고 끄는 스위치 구조를 세웁니다. 이 단계만 끝나도 "지휘만 하고 위임하라"는 선언 계층이 작동합니다.</p>
+  <p>먼저 설정 본체 폴더를 만들고 지침 파일을 작성합니다.</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div>
+<pre><code><span class="c">$</span> mkdir -p ~/.claude/fable/agents ~/.claude/fable/hooks</code></pre>
+  </div>
+  <p>지침 파일에는 역할 정의, 라우팅 기준, 직접 처리 허용 범위를 담습니다. 직접 처리 범위를 명시하는 부분이 중요합니다. 작은 작업까지 전부 위임하면 오히려 왕복 비용이 더 커지기 때문입니다.</p>
+  <figure class="code"><figcaption><span>~/.claude/fable/fable.md</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>## Fable 오케스트레이션 모드
+
+당신은 오케스트레이터입니다. 코드 작성·수정·테스트·디버깅·리팩터링 같은
+실행 작업은 직접 하지 말고, 명확한 지침과 함께 서브에이전트에게 위임하세요.
+당신의 역할은 계획·분배·진행 파악·결과 종합·중요한 판단입니다.
+
+라우팅: 무거운 추론·설계·근본원인 분석 -&gt; deep-reasoner(Opus, effort max) /
+일반 구현·수정·테스트·디버깅·리뷰 -&gt; 실행 에이전트(Opus로 실행) /
+단순 명령 실행·빌드·조회·로그 확인 같은 잡무 -&gt; runner(Haiku).
+
+독립 작업은 병렬로 위임하고 위임 중에도 계속 진행하세요. 단, 1~2개 파일의
+사소한 수정·오타·설정/문서 변경·단순 조회는 직접 처리해도 됩니다.
+
+강제 게이트(PreToolUse 훅)가 직접 코드 수정을 턴당 2개 파일로 제한합니다.
+차단 메시지를 받으면 재시도하지 말고 즉시 그 작업을 서브에이전트에 위임하세요.</code></pre>
+</figure>
+  <p>이 지침을 CLAUDE.md에 직접 붙여넣지 않는 이유가 스위치 구조의 핵심입니다. 대신 빈 파일 하나와 심링크 하나를 추가로 만듭니다.</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div>
+<pre><code><span class="c">$</span> echo '&lt;!-- fable off --&gt;' &gt; ~/.claude/fable/empty.md
+<span class="c">$</span> ln -sfn ~/.claude/fable/fable.md ~/.claude/fable/active.md
+<span class="c">$</span> readlink ~/.claude/fable/active.md
+<span class="o">/home/사용자명/.claude/fable/fable.md</span></code></pre>
+  </div>
+  <p>그리고 <code>~/.claude/CLAUDE.md</code> 맨 끝에 임포트 한 줄만 추가합니다. Claude Code는 CLAUDE.md 안의 <code>@경로</code> 문법으로 다른 파일을 함께 로드합니다.</p>
+  <figure class="code"><figcaption><span>~/.claude/CLAUDE.md (맨 끝에 추가)</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>&lt;!-- fable-loader: 토글은 fable on/off, 이 줄은 그대로 둡니다 --&gt;
+@/home/사용자명/.claude/fable/active.md</code></pre>
+  </figure>
+  <p>이제 CLAUDE.md는 항상 active.md를 로드하지만, 그 심링크가 어디를 가리키느냐에 따라 내용이 달라집니다. fable.md를 가리키면 지침이 로드되고, empty.md를 가리키면 아무것도 로드되지 않습니다. 켜고 끌 때 CLAUDE.md를 건드릴 필요가 없어지는 구조입니다.</p>
+  <p>이 심링크 전환을 매번 손으로 하지 않도록 토글 명령을 만듭니다. <code>~/.local/bin/fable</code>로 저장하고 실행 권한을 주면 어느 터미널에서든 <code>fable on</code>, <code>fable off</code>, <code>fable status</code>로 조작할 수 있습니다. 설정 파일은 전혀 건드리지 않고 상태 파일과 심링크만 전환하며, status는 로딩 코드 4종의 설치 여부까지 한 번에 점검합니다. 전체 스크립트는 다음과 같습니다.</p>
+  <details class="full"><summary>~/.local/bin/fable 전체 보기</summary>
+  <figure class="code"><figcaption><span>~/.local/bin/fable</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>#!/usr/bin/env bash
+# ~/.local/bin/fable — Fable 오케스트레이션 스위치 (런처가 아니라 토글)
+#
+# 본체는 ~/.claude/fable/ 한 곳에만 있고, 각 설정 파일에는 얇은 로딩 코드만 있다:
+#   1. ~/.claude/CLAUDE.md 끝의 @active.md 한 줄          (선언)
+#   2. ~/.claude/agents/ 의 deep-reasoner/runner 심링크    (역할 배정)
+#   3. ~/.bashrc 의 source ~/.claude/fable/env.sh 한 줄    (sonnet-&gt;Opus 리매핑)
+#   4. ~/.claude/settings.json 의 PreToolUse 게이트 훅      (강제 장치)
+#
+# 토글은 설정 파일을 건드리지 않는다:
+#   fable on      .fable-state=on,  active.md -&gt; fable.md  (지침 로드)
+#   fable off     .fable-state=off, active.md -&gt; empty.md  (지침 없음)
+#   fable status  상태와 로딩 코드 설치 여부 점검
+#
+# 적용 시점: 다음에 새로 시작하는 claude 세션부터 (떠 있는 세션은 영향 없음).
+set -u
+FABLE_DIR=&quot;$HOME/.claude/fable&quot;
+STATE=&quot;$HOME/.claude/.fable-state&quot;
+case &quot;${1:-status}&quot; in
+  on)
+    echo on &gt; &quot;$STATE&quot;
+    ln -sfn &quot;$FABLE_DIR/fable.md&quot; &quot;$FABLE_DIR/active.md&quot;
+    echo &quot;Fable 오케스트레이션 ON — 다음 claude 세션부터 적용됩니다.&quot;
+    ;;
+  off)
+    echo off &gt; &quot;$STATE&quot;
+    ln -sfn &quot;$FABLE_DIR/empty.md&quot; &quot;$FABLE_DIR/active.md&quot;
+    echo &quot;Fable 오케스트레이션 OFF — 다음 claude 세션부터 일반 모드입니다.&quot;
+    ;;
+  status)
+    s=$(cat &quot;$STATE&quot; 2&gt;/dev/null || echo off)
+    echo &quot;Fable 오케스트레이션: ${s^^}&quot;
+    echo &quot;  active.md -&gt; $(readlink &quot;$FABLE_DIR/active.md&quot; 2&gt;/dev/null || echo &#x27;(없음)&#x27;)&quot;
+    grep -q &#x27;fable/active.md&#x27; &quot;$HOME/.claude/CLAUDE.md&quot; 2&gt;/dev/null &amp;&amp; ok=&#x27;[OK]&#x27; || ok=&#x27;[--]&#x27;
+    echo &quot;  $ok @import   ~/.claude/CLAUDE.md&quot;
+    grep -q &#x27;fable/env.sh&#x27; &quot;$HOME/.bashrc&quot; 2&gt;/dev/null &amp;&amp; ok=&#x27;[OK]&#x27; || ok=&#x27;[--]&#x27;
+    echo &quot;  $ok env 래퍼  ~/.bashrc&quot;
+    [ -L &quot;$HOME/.claude/agents/deep-reasoner.md&quot; ] &amp;&amp; [ -L &quot;$HOME/.claude/agents/runner.md&quot; ] &amp;&amp; ok=&#x27;[OK]&#x27; || ok=&#x27;[--]&#x27;
+    echo &quot;  $ok agents    ~/.claude/agents&quot;
+    grep -q &#x27;orchestration-gate&#x27; &quot;$HOME/.claude/settings.json&quot; 2&gt;/dev/null &amp;&amp; ok=&#x27;[OK]&#x27; || ok=&#x27;[--]&#x27;
+    echo &quot;  $ok 게이트 훅 ~/.claude/settings.json&quot;
+    [ -x &quot;$FABLE_DIR/hooks/orchestration-gate.py&quot; ] &amp;&amp; ok=&#x27;[OK]&#x27; || ok=&#x27;[--]&#x27;
+    echo &quot;  $ok 게이트 스크립트 $FABLE_DIR/hooks/orchestration-gate.py&quot;
+    ;;
+  *)
+    echo &quot;사용법: fable on | off | status&quot; &gt;&amp;2
+    exit 1
+    ;;
+esac</code></pre>
+</figure>
+  </details>
+</section>
+
+<section>
+  <p class="eyebrow">2단계</p>
+  <h2>서브에이전트 역할 배정</h2>
+  <p>두 번째 단계에서는 Fable 5가 위임할 대상을 만듭니다. Claude Code는 <code>~/.claude/agents/</code> 폴더의 마크다운 파일을 커스텀 서브에이전트로 인식하고, 파일 상단의 frontmatter로 모델과 도구를 지정할 수 있습니다.</p>
+  <p>먼저 무거운 추론 전담인 <strong>deep-reasoner</strong>입니다. 어려운 문제를 풀어서 실행 지침으로 돌려주는 역할이라 Opus 4.8에 추론 예산을 최대로 줍니다.</p>
+  <figure class="code"><figcaption><span>~/.claude/fable/agents/deep-reasoner.md</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>---
+name: deep-reasoner
+description: 무거운 추론·시스템 설계·아키텍처 결정·복잡한 근본원인 분석 전담.
+  어려운 사고가 필요한 문제만 위임하고 단순 구현에는 쓰지 말 것.
+model: claude-opus-4-8
+effort: max
+---
+
+당신은 심층 추론 전문가입니다. 최대 추론 예산으로 끝까지 생각하세요.
+검토한 대안과 버린 이유, 리스크와 엣지케이스를 함께 제시하고 증거 기반으로
+판단하며 확인하지 못한 것은 추측이라고 명시합니다. 대량 구현은 하지 말고
+핵심 난제만 풀어 실행 지침으로 정리해 오케스트레이터에게 돌려주세요.</code></pre>
+</figure>
+  <p>다음은 잡무 전담인 <strong>runner</strong>입니다. 판단이 필요 없는 명령 실행과 조회만 맡기 때문에 Haiku 4.5로 충분하고, 도구도 읽기 계열로만 제한합니다.</p>
+  <figure class="code"><figcaption><span>~/.claude/fable/agents/runner.md</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>---
+name: runner
+description: 판단이 필요 없는 잡무 전담(Haiku). 명령 실행·빌드/테스트·
+  파일/로그 확인·검색만 위임하고 코드 로직 변경·설계 판단에는 쓰지 말 것.
+model: claude-haiku-4-5-20251001
+effort: low
+tools: Bash, Read, Grep, Glob
+---
+
+당신은 잡무 실행자입니다. 주어진 명령과 조회를 그대로 실행하고 결과만
+간결히 보고하세요. 코드 로직 변경이나 설계 판단은 하지 않습니다.
+애매하면 멈추고 그대로 오케스트레이터에게 되돌립니다.</code></pre>
+</figure>
+  <p>frontmatter에서 자주 쓰는 필드는 아래와 같습니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>필드</th><th>값 예시</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><code>name</code></td><td><code>deep-reasoner</code></td><td>에이전트 이름. 지침에서 이 이름으로 라우팅</td></tr>
+      <tr><td><code>description</code></td><td>위임 기준 설명</td><td>메인 에이전트가 언제 위임할지 판단하는 근거</td></tr>
+      <tr><td><code>model</code></td><td><code>claude-opus-4-8</code></td><td>이 에이전트가 사용할 모델. 생략하면 세션 모델 상속</td></tr>
+      <tr><td><code>effort</code></td><td><code>max</code>, <code>low</code></td><td>추론 예산. 생략하면 세션 설정 상속</td></tr>
+      <tr><td><code>tools</code></td><td><code>Bash, Read, Grep, Glob</code></td><td>허용 도구 목록. 생략하면 전체 도구</td></tr>
+    </tbody>
+  </table></div>
+  <p>두 파일을 본체 폴더에 두고, 에이전트 폴더에는 심링크만 겁니다. 스위치 구조의 원칙대로 실제 내용은 한 곳에만 두기 위해서입니다.</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div>
+<pre><code><span class="c">$</span> ln -sfn ~/.claude/fable/agents/deep-reasoner.md ~/.claude/agents/deep-reasoner.md
+<span class="c">$</span> ln -sfn ~/.claude/fable/agents/runner.md ~/.claude/agents/runner.md
+<span class="c">$</span> ls -la ~/.claude/agents/
+<span class="o">deep-reasoner.md -&gt; /home/사용자명/.claude/fable/agents/deep-reasoner.md
+runner.md -&gt; /home/사용자명/.claude/fable/agents/runner.md</span></code></pre>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">3단계</p>
+  <h2>Sonnet 요청을 Opus로 리매핑</h2>
+  <p>세 번째 단계는 선택 사항이지만, 실행 품질을 Opus 4.8로 끌어올리고 싶다면 필요합니다. oh-my-claudecode 같은 오케스트레이션 플러그인의 실행 에이전트 다수가 frontmatter에 <code>model: sonnet</code>으로 고정되어 있는데, Claude Code는 <code>ANTHROPIC_DEFAULT_SONNET_MODEL</code> 환경변수로 이 sonnet 등급이 실제로 어떤 모델을 가리킬지 바꿀 수 있습니다.</p>
+  <p>문제는 이 환경변수를 어디에 두느냐입니다. .bashrc에 그냥 export하면 스위치를 꺼도 계속 적용됩니다. 그래서 스위치 상태를 실행 시점마다 읽는 래퍼 함수로 만듭니다.</p>
+  <figure class="code"><figcaption><span>~/.claude/fable/env.sh</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code># fable 스위치 로더 (.bashrc에서 source 됨)
+# 스위치가 on이면 claude 실행 시 sonnet-&gt;Opus 리매핑을 주입한다.
+_fable_on() { [ &quot;$(cat &quot;$HOME/.claude/.fable-state&quot; 2&gt;/dev/null)&quot; = &quot;on&quot; ]; }
+_fable_run() {
+  if _fable_on; then
+    ANTHROPIC_DEFAULT_SONNET_MODEL=&quot;claude-opus-4-8&quot; &quot;$@&quot;
+  else
+    &quot;$@&quot;
+  fi
+}
+claude() { _fable_run command claude &quot;$@&quot;; }</code></pre>
+</figure>
+  <p>.bashrc 맨 끝에 로딩 한 줄을 추가하면 설치가 끝납니다.</p>
+  <figure class="code"><figcaption><span>~/.bashrc (맨 끝에 추가)</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code># fable 오케스트레이션 스위치 로더
+[ -f "$HOME/.claude/fable/env.sh" ] &amp;&amp; . "$HOME/.claude/fable/env.sh"</code></pre>
+  </figure>
+  <p>이제 터미널에서 claude를 치는 순간마다 래퍼가 스위치 상태를 확인하고, on일 때만 환경변수를 주입합니다. 이미 열려 있는 터미널에는 <code>source ~/.bashrc</code>를 한 번 실행해 줍니다.</p>
+  <div class="callout info"><span class="ic">ℹ</span><p><span class="t">Sonnet을 유지하고 싶다면</span>실행 품질보다 비용이 우선이라면 이 단계를 건너뛰면 됩니다. 그 경우 sonnet 고정 에이전트는 그대로 Sonnet으로 실행되고, 나머지 계층(지침·역할 배정·강제 게이트)은 동일하게 작동합니다. 반대로 이 리매핑을 적용하면 실행은 Opus 4.8, 잡무는 Haiku 4.5로 Sonnet 등급을 건너뛰는 구성이 됩니다.</p></div>
+</section>
+
+<section>
+  <p class="eyebrow gate">4단계 · 핵심</p>
+  <h2>강제 게이트 — 권고를 물리 차단으로</h2>
+  <p>마지막 계층이 이 가이드의 핵심입니다. 앞의 세 단계는 전부 권고입니다. 지침이 로드되어 있어도 모델이 스스로 판단해서 직접 코드를 고치는 일은 언제든 일어날 수 있습니다. 이걸 막는 장치가 PreToolUse 훅입니다.</p>
+  <p>PreToolUse 훅은 Claude Code가 도구를 실행하기 직전에 호출되는 스크립트입니다. 스크립트가 종료 코드 2로 끝나면 그 도구 호출이 차단되고, stderr에 적은 메시지가 모델에게 전달됩니다. 게이트의 규칙은 다음과 같습니다.</p>
+  <ul class="rules">
+    <li>메인 에이전트는 한 턴에 코드 파일을 2개까지만 직접 수정할 수 있습니다. 3개째부터 차단되고, 위임하라는 지시가 모델에게 돌아갑니다.</li>
+    <li>같은 파일을 다시 고치는 것은 개수에 세지 않습니다. 마크다운, JSON, YAML 같은 설정·문서 파일도 제한하지 않습니다.</li>
+    <li>Bash로 코드 파일을 고치는 우회 경로(<code>sed -i</code>, <code>perl -i</code>, 리다이렉트, <code>tee</code>)는 개수와 무관하게 차단합니다.</li>
+    <li>스위치가 off면 모든 검사를 건너뛰고 통과시킵니다.</li>
+  </ul>
+
+  <h3>서브에이전트를 구분하는 방법</h3>
+  <p>게이트 설계에서 가장 조심해야 할 부분이 서브에이전트 처리입니다. PreToolUse 훅은 서브에이전트의 도구 호출에도 발화되기 때문에, 구분 없이 차단하면 위임받은 실행 에이전트까지 막혀서 오케스트레이션 전체가 죽습니다.</p>
+  <p>다행히 공식적으로 지원되는 구분 방법이 있습니다. 훅이 서브에이전트 안에서 발화되면 stdin으로 들어오는 JSON에 <code>agent_id</code>와 <code>agent_type</code> 필드가 추가됩니다. 메인 에이전트의 호출에는 이 필드가 없습니다. 실제 페이로드를 비교하면 차이가 명확합니다.</p>
+  <figure class="code"><figcaption><span>훅 페이로드 비교</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>// 메인 에이전트의 Write 호출 - agent 필드 없음
+{
+  "session_id": "75f02f85-...",
+  "prompt_id": "6d225c46-...",
+  "tool_name": "Write",
+  "tool_input": { "file_path": "/project/a.ts" }
+}
+
+// 서브에이전트의 Write 호출 - agent_id, agent_type 존재
+{
+  "session_id": "75f02f85-...",
+  "prompt_id": "6d225c46-...",
+  "agent_id": "a513e1e15cbfd1608",
+  "agent_type": "general-purpose",
+  "tool_name": "Write",
+  "tool_input": { "file_path": "/project/b.ts" }
+}</code></pre>
+  </figure>
+  <p><code>prompt_id</code>도 함께 눈여겨볼 필드입니다. 사용자가 프롬프트를 보낼 때마다 새 값이 부여되기 때문에, 이 값이 바뀌면 "새 턴이 시작됐다"로 보고 파일 카운터를 리셋할 수 있습니다. 별도의 턴 감지 훅 없이 PreToolUse 훅 하나로 턴당 제한이 구현되는 이유입니다.</p>
+  <p>게이트 스크립트의 핵심 판별 로직은 아래와 같습니다.</p>
+  <figure class="code"><figcaption><span>게이트 핵심 로직 (발췌)</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>data = json.load(sys.stdin)
+# 스위치가 off면 즉시 통과
+if state != "on":
+    allow()
+# 서브에이전트는 게이트 대상이 아님 - 위임이 실행 경로다
+if data.get("agent_id") or data.get("agent_type"):
+    allow()
+# 같은 턴(prompt_id)에서 수정한 코드 파일이 이미 2개면 차단
+if len(gate["files"]) &gt;= LIMIT:
+    deny("추가 코드 수정은 서브에이전트에 위임하세요: ...")</code></pre>
+  </figure>
+  <p>전체 스크립트에는 코드 파일 확장자 판별, Bash 우회 패턴 감지, 턴 카운터 저장과 리셋, 오류 시 통과(fail-open) 처리까지 포함됩니다. 게이트가 버그로 죽어도 세션이 마비되지 않게 하는 안전장치까지 갖춘 전체 스크립트는 다음과 같습니다.</p>
+  <details class="full"><summary>~/.claude/fable/hooks/orchestration-gate.py 전체 보기</summary>
+  <figure class="code"><figcaption><span>~/.claude/fable/hooks/orchestration-gate.py</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>#!/usr/bin/env python3
+# ~/.claude/fable/hooks/orchestration-gate.py — fable 강제 게이트 (PreToolUse)
+#
+# 메인 에이전트가 한 턴(prompt_id)에 코드 파일을 2개까지만 직접 수정하게 허용하고,
+# 3개째부터 차단하며 위임 지시를 돌려준다. Bash 를 통한 코드 파일 수정은 항상 차단.
+# 서브에이전트(payload 에 agent_id/agent_type 존재)는 전부 통과 — 위임이 실행 경로다.
+#
+# fable off 상태(~/.claude/.fable-state != on)면 즉시 통과. 등록은 settings.json 에
+# 1회(로딩 코드), 동작 여부는 스위치가 지배한다.
+# 오류 시 fail-open(통과) — 게이트 버그가 세션을 마비시키지 않게 한다.
+import json
+import os
+import re
+import sys
+import time
+
+LIMIT = 2
+STATE_FILE = os.path.expanduser(&quot;~/.claude/.fable-state&quot;)
+GATE_STATE_DIR = os.path.expanduser(&quot;~/.claude/fable/state&quot;)
+CODE_EXTS = {
+    &quot;ts&quot;, &quot;tsx&quot;, &quot;js&quot;, &quot;jsx&quot;, &quot;mjs&quot;, &quot;cjs&quot;, &quot;py&quot;, &quot;go&quot;, &quot;rs&quot;, &quot;java&quot;, &quot;kt&quot;,
+    &quot;kts&quot;, &quot;swift&quot;, &quot;c&quot;, &quot;h&quot;, &quot;cc&quot;, &quot;cpp&quot;, &quot;hpp&quot;, &quot;cs&quot;, &quot;rb&quot;, &quot;php&quot;, &quot;vue&quot;,
+    &quot;svelte&quot;, &quot;astro&quot;, &quot;css&quot;, &quot;scss&quot;, &quot;sass&quot;, &quot;less&quot;, &quot;html&quot;, &quot;sh&quot;, &quot;bash&quot;,
+    &quot;zsh&quot;, &quot;sql&quot;, &quot;lua&quot;, &quot;dart&quot;, &quot;scala&quot;, &quot;ex&quot;, &quot;exs&quot;, &quot;zig&quot;, &quot;ipynb&quot;,
+}
+EXT_RE = &quot;|&quot;.join(sorted(CODE_EXTS))
+
+
+def allow():
+    sys.exit(0)
+
+
+def deny(msg):
+    sys.stderr.write(msg)
+    sys.exit(2)
+
+
+def is_code(path):
+    return path.rsplit(&quot;.&quot;, 1)[-1].lower() in CODE_EXTS if &quot;.&quot; in path else False
+
+
+def main():
+    try:
+        state = open(STATE_FILE).read().strip()
+    except OSError:
+        state = &quot;off&quot;
+    if state != &quot;on&quot;:
+        allow()
+    data = json.load(sys.stdin)
+    if data.get(&quot;agent_id&quot;) or data.get(&quot;agent_type&quot;):
+        allow()  # 서브에이전트는 게이트 대상이 아님
+    tool = data.get(&quot;tool_name&quot;, &quot;&quot;)
+    tool_input = data.get(&quot;tool_input&quot;) or {}
+    if tool == &quot;Bash&quot;:
+        cmd = tool_input.get(&quot;command&quot;, &quot;&quot;)
+        writes_inplace = re.search(r&quot;\b(sed|perl)\s+[^|;&amp;]*-\w*i&quot;, cmd)
+        writes_redirect = re.search(
+            r&quot;(?:&gt;&gt;?|\btee\b(?:\s+-\w+)*)\s*[&#x27;\&quot;]?[^\s&#x27;\&quot;|;&amp;&lt;&gt;]+\.(?:%s)\b&quot; % EXT_RE, cmd
+        )
+        touches_code = re.search(r&quot;\.(?:%s)\b&quot; % EXT_RE, cmd)
+        if writes_redirect or (writes_inplace and touches_code):
+            deny(
+                &quot;[fable 게이트] 메인 에이전트는 Bash로 코드 파일을 수정할 수 없습니다. &quot;
+                &quot;코드 수정은 Edit/Write 도구(턴당 %d개 파일까지)를 쓰거나 서브에이전트에 위임하세요: &quot;
+                &quot;일반 구현·수정 → 실행 에이전트(Opus), 심층 추론·설계 → deep-reasoner, 단순 잡무 → runner.&quot; % LIMIT
+            )
+        allow()
+    if tool not in (&quot;Edit&quot;, &quot;Write&quot;, &quot;NotebookEdit&quot;, &quot;MultiEdit&quot;):
+        allow()
+    path = tool_input.get(&quot;file_path&quot;) or tool_input.get(&quot;notebook_path&quot;) or &quot;&quot;
+    if not path or not is_code(path):
+        allow()  # 설정·문서 등 비코드 파일은 직접 수정 허용
+    session = re.sub(r&quot;[^a-zA-Z0-9-]&quot;, &quot;&quot;, data.get(&quot;session_id&quot;, &quot;nosession&quot;))
+    prompt = data.get(&quot;prompt_id&quot;, &quot;&quot;)
+    os.makedirs(GATE_STATE_DIR, exist_ok=True)
+    gate_file = os.path.join(GATE_STATE_DIR, session + &quot;.json&quot;)
+    gate = {&quot;prompt_id&quot;: prompt, &quot;files&quot;: []}
+    try:
+        saved = json.load(open(gate_file))
+        if saved.get(&quot;prompt_id&quot;) == prompt:
+            gate = saved
+        else:  # 새 턴 — 카운터 리셋 + 오래된 세션 상태 정리
+            now = time.time()
+            for fn in os.listdir(GATE_STATE_DIR):
+                p = os.path.join(GATE_STATE_DIR, fn)
+                if now - os.path.getmtime(p) &gt; 86400:
+                    os.remove(p)
+    except (OSError, ValueError):
+        pass
+    if path in gate[&quot;files&quot;]:
+        allow()  # 같은 파일 재수정은 개수에 안 침
+    if len(gate[&quot;files&quot;]) &lt; LIMIT:
+        gate[&quot;files&quot;].append(path)
+        json.dump(gate, open(gate_file, &quot;w&quot;))
+        allow()
+    deny(
+        &quot;[fable 게이트] 이번 턴에 메인 에이전트가 직접 수정한 코드 파일이 이미 %d개입니다 (%s). &quot;
+        &quot;추가 코드 수정은 반드시 서브에이전트에 위임하세요: 일반 구현·수정·테스트·리뷰 → 실행 에이전트(Opus), &quot;
+        &quot;심층 추론·설계·근본원인 분석 → deep-reasoner, 단순 명령·조회 → runner. &quot;
+        &quot;지금 하려던 수정(%s)을 명확한 지침과 함께 Agent 도구로 위임하면 됩니다.&quot;
+        % (LIMIT, &quot;, &quot;.join(gate[&quot;files&quot;]), path)
+    )
+
+
+if __name__ == &quot;__main__&quot;:
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception:
+        sys.exit(0)  # fail-open</code></pre>
+</figure>
+  </details>
+  <p>스크립트를 <code>~/.claude/fable/hooks/orchestration-gate.py</code>로 저장하고 실행 권한을 준 다음, <code>~/.claude/settings.json</code>에 훅을 등록합니다. 이 등록은 로딩 코드라서 한 번만 하면 되고, 이후 켜고 끄는 것은 스크립트 안의 스위치 확인이 처리합니다.</p>
+  <figure class="code"><figcaption><span>~/.claude/settings.json (hooks 키 추가)</span><button class="copy" type="button">복사</button></figcaption>
+<pre><code>{
+  &quot;hooks&quot;: {
+    &quot;PreToolUse&quot;: [
+      {
+        &quot;matcher&quot;: &quot;Write|Edit|NotebookEdit|MultiEdit|Bash&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;/home/사용자명/.claude/fable/hooks/orchestration-gate.py&quot;
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+</figure>
+</section>
+
+<section>
+  <p class="eyebrow ok">검증</p>
+  <h2>실제로 차단되는지 검증하기</h2>
+  <p>강제 게이트는 만들어놓는 것보다 실제로 차단되는지 증명하는 것이 중요합니다. 규칙을 적는 것과 규칙을 어겼을 때 실제로 막히는 것은 다른 문제이기 때문입니다.</p>
+  <div class="duo">
+    <div class="p before"><span class="tag">지침만 있을 때</span><p>CLAUDE.md에 위임 지침이 로드되어 있어도 모델이 판단에 따라 코드 파일 3개, 4개를 직접 수정하는 일이 일어난다. 지침은 권고라서 어긴다고 막히지 않는다.</p></div>
+    <div class="p after"><span class="tag">강제 게이트 적용 후</span><p>3번째 코드 파일 수정 시도가 도구 호출 단계에서 차단되고, 모델은 위임 지시 메시지를 받는다. 파일은 디스크에 생성되지 않는다. 서브에이전트의 수정은 개수 제한 없이 통과한다.</p></div>
+  </div>
+  <p>검증은 새 터미널에서 헤드리스 세션으로 진행합니다. 먼저 메인 에이전트에게 코드 파일 3개를 만들게 시키고, 이어서 같은 작업을 서브에이전트에게 위임시켜 결과를 비교합니다.</p>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div>
+<pre><code><span class="c">$</span> claude -p "c1.ts, c2.ts, c3.ts 세 파일을 순서대로 생성해라. 차단되면 BLOCKED: 뒤에 사유를 출력하고 멈춰라."
+<span class="b">BLOCKED: [fable 게이트] 이번 턴에 메인 에이전트가 직접 수정한 코드 파일이 이미 2개입니다</span>
+<span class="c">$</span> ls *.ts
+<span class="o">c1.ts  c2.ts</span>
+<span class="c">$</span> claude -p "서브에이전트를 띄워서 d1.ts, d2.ts, d3.ts 세 파일을 생성하게 해라."
+<span class="o">SUB_DONE</span>
+<span class="c">$</span> ls d*.ts
+<span class="o">d1.ts  d2.ts  d3.ts</span></code></pre>
+  </div>
+  <p>기대한 대로 메인 에이전트는 2개까지만 만들고 3개째에서 차단됐습니다. c3.ts는 디스크에 존재하지 않습니다. 반면 서브에이전트는 3개를 전부 만들었습니다. 위임 경로는 손상되지 않았다는 뜻입니다. 이 두 결과가 함께 확인되어야 게이트가 완성된 것입니다.</p>
+</section>
+
+<section>
+  <p class="eyebrow">운영</p>
+  <h2>일상 사용법</h2>
+  <p>설치가 끝나면 일상 조작은 명령 세 개가 전부입니다.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>명령</th><th>동작</th></tr></thead>
+    <tbody>
+      <tr><td><code>fable on</code></td><td>지침 로드 + 리매핑 + 게이트 활성. 다음 세션부터 적용</td></tr>
+      <tr><td><code>fable off</code></td><td>전부 비활성. 로딩 코드는 그대로 두고 심링크와 상태만 전환</td></tr>
+      <tr><td><code>fable status</code></td><td>현재 상태와 로딩 코드 4종의 설치 여부 점검</td></tr>
+    </tbody>
+  </table></div>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div>
+<pre><code><span class="c">$</span> fable status
+<span class="o">Fable 오케스트레이션: ON
+  active.md -&gt; /home/사용자명/.claude/fable/fable.md
+  [OK] @import   ~/.claude/CLAUDE.md
+  [OK] env 래퍼  ~/.bashrc
+  [OK] agents    ~/.claude/agents
+  [OK] 게이트 훅 ~/.claude/settings.json
+  [OK] 게이트 스크립트 ~/.claude/fable/hooks/orchestration-gate.py</span></code></pre>
+  </div>
+  <div class="callout warn"><span class="ic">⚠</span><p><span class="t">적용 시점에 주의</span>CLAUDE.md와 훅은 세션 시작 시점에 로드됩니다. fable on/off를 실행해도 이미 떠 있는 세션에는 적용되지 않고, 다음에 새로 시작하는 세션부터 반영됩니다. env.sh의 래퍼 함수는 claude를 실행하는 순간마다 상태를 읽기 때문에 터미널을 새로 열 필요까지는 없습니다.</p></div>
+  <p>지휘자 모델 자체는 스위치가 건드리지 않습니다. Claude Code 안에서 <code>/model</code> 명령으로 Fable 5를 기본 모델로 저장해 두면, 그 위에 이 오케스트레이션 계층이 얹히는 구조입니다.</p>
+</section>
+
+<section>
+  <p class="eyebrow">한계</p>
+  <h2>주의할 점</h2>
+  <p>운영하면서 알아둬야 할 한계와 설계 의도를 정리합니다. 게이트를 과신하지 않고 쓰기 위해 필요한 내용입니다.</p>
+  <ul class="notes">
+    <li>게이트는 완벽한 차단막이 아니라 <strong>폭주 방지 장치</strong>입니다. Bash 우회 패턴 감지는 <code>sed -i</code>, <code>perl -i</code>, 리다이렉트, <code>tee</code> 같은 대표 경로를 막지만, 이론상 다른 우회가 불가능하지는 않습니다. 그래서 지침에도 "Bash로 코드를 수정하지 않는다"를 함께 적어 운영 규칙과 물리 장치를 겹으로 둡니다.</li>
+    <li>게이트 스크립트는 오류가 나면 차단이 아니라 통과를 선택합니다(<strong>fail-open</strong>). 게이트 버그 하나가 모든 도구 호출을 막아 세션을 마비시키는 것보다, 그 턴을 놓치는 쪽이 낫다는 설계입니다.</li>
+    <li>제한 대상은 <strong>코드 파일뿐</strong>입니다. 마크다운 문서나 설정 파일 정리는 지휘자가 직접 해도 토큰 손해가 크지 않고, 이것까지 막으면 사소한 작업마다 왕복 비용이 생기기 때문입니다.</li>
+    <li>셸 래퍼를 거치지 않는 실행 경로(IDE 확장 등)에서는 3단계의 Sonnet 리매핑이 적용되지 않습니다. 지침에 "래퍼 없는 세션에서는 위임 시 model을 명시하라"는 문구를 넣어 보완합니다.</li>
+    <li>다른 플러그인의 훅과는 <strong>충돌하지 않습니다</strong>. Claude Code는 등록된 PreToolUse 훅을 전부 실행하고 그중 하나라도 차단하면 막는 구조라서, 조언을 주입하는 기존 훅과 차단 게이트가 나란히 작동합니다.</li>
+    <li>턴 경계 감지에 쓰는 <code>prompt_id</code> 필드는 Claude Code <strong>v2.1.196 이상</strong>에서 제공됩니다. 그 이전 버전에는 이 필드가 없어 턴마다 카운터가 리셋되지 않으므로, 게이트를 쓰기 전 <code>claude --version</code>으로 버전을 확인하는 편이 안전합니다.</li>
+  </ul>
+</section>
+
+<footer>
+  Fable 5 오케스트레이션 가이드 · 설정 파일 전체는 이 저장소의 <code>fable-orchestration/setup/</code>에 있으며 <code>bash setup/install.sh</code> 한 번으로 설치됩니다.
+</footer>
+
+</div>
+<script>
+document.querySelectorAll('button.copy').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var fig = btn.closest('figure.code');
+    var code = fig ? fig.querySelector('pre code') : null;
+    if(!code) return;
+    var text = code.textContent;
+    function done(ok){
+      btn.textContent = ok ? '복사됨' : '실패';
+      setTimeout(function(){ btn.textContent = '복사'; }, 1600);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){done(true);}, function(){done(false);});
+    }else{
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try{ done(document.execCommand('copy')); }catch(e){ done(false); }
+      document.body.removeChild(ta);
+    }
+  });
+});
+</script>
+</body>
+</html>
